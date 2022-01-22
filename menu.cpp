@@ -41,3 +41,28 @@ Menu* MainMenu::getNext() {
         default: return this;
     }
 }
+
+/*************************************************************************/
+
+TravelMenu::TravelMenu(const TransportNetwork& network) : Menu(network) {}
+
+void TravelMenu::display() const {
+
+    std::cout << "Welcome to the STCP helper!" << std::endl
+              << "(Please choose an option)" << std::endl
+              << "0. Exit." << std::endl
+              << "1. Enter stop code." << std::endl
+              << "2. Enter stop name." << std::endl
+              << "3. Enter location." << std::endl;
+}
+
+Menu* TravelMenu::getNext() {
+    int choice = getInt();
+    switch (choice) {
+        case 0: return nullptr;
+        case 1: return this;
+        case 2: return this;
+        case 3: return this;
+        default: return this;
+    }
+}

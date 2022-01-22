@@ -45,4 +45,10 @@ public:
     Menu* getNext() override;
 };
 
+class TravelMenu : public Menu {
+    TravelMenu(const TransportNetwork& network);
+    void display() const override;
+    Menu* getNext() override;
+};
+
 #endif
