@@ -71,10 +71,12 @@ Menu* TravelMenu::getNext() {
 
 ByCodeMenu::ByCodeMenu(const TransportNetwork& network) : Menu(network) {}
 
-const std::string& ByCodeMenu::getCode() const {
+const std::string ByCodeMenu::getCode() const {
     std::string userInput;
     std::cin >> userInput;
-    
+    if (std::cin.eof()) return "";
+    if (!network.exists(userInput)) return INVALID_STRING_INPUT;
+    return userInput;
 }
 
 void ByCodeMenu::display() const {
@@ -83,5 +85,8 @@ void ByCodeMenu::display() const {
 }
 
 Menu* ByCodeMenu::getNext() {
-
+    std::string code = getCode();
+    if (code == "") return nullptr;
+    if (code == INVALID_STRING_INPUT) return this;
+    else return this;
 }

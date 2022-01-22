@@ -5,6 +5,8 @@
 
 #include "transportnetwork.h"
 
+#define INVALID_STRING_INPUT "INVALID"
+
 class Menu {
 protected:
 
@@ -57,12 +59,12 @@ public:
 
 class ByCodeMenu : public Menu {
 private:
-    const std::string& getCode() const;
+    const std::string getCode() const;
 public:
     ByCodeMenu(const TransportNetwork& network);
     virtual ~ByCodeMenu() {}
     void display() const override;
     Menu* getNext() override;
-}
+};
 
 #endif
