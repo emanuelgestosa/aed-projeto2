@@ -55,4 +55,14 @@ public:
     Menu* getNext() override;
 };
 
+class ByCodeMenu : public Menu {
+private:
+    const std::string& getCode() const;
+public:
+    ByCodeMenu(const TransportNetwork& network);
+    virtual ~ByCodeMenu() {}
+    void display() const override;
+    Menu* getNext() override;
+}
+
 #endif

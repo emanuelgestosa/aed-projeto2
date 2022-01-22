@@ -16,6 +16,10 @@ bool TransportNetwork::getReadSuccess() const {
     return readSuccess;
 }
 
+bool TransportNetwork::exists(const std::string& code) const {
+    return stopToInt.find(code) != stopToInt.end();
+}
+
 bool TransportNetwork::readStops() {
     std::ifstream stopsFile(STOPS_FILE);
     if (!stopsFile.is_open()) return false;

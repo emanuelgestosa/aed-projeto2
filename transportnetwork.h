@@ -48,6 +48,7 @@ public:
 
     TransportNetwork();
     bool getReadSuccess() const;
+    bool exists(const std::string& code) const;
 
 };
 

@@ -66,3 +66,22 @@ Menu* TravelMenu::getNext() {
         default: return this;
     }
 }
+
+/*************************************************************************/
+
+ByCodeMenu::ByCodeMenu(const TransportNetwork& network) : Menu(network) {}
+
+const std::string& ByCodeMenu::getCode() const {
+    std::string userInput;
+    std::cin >> userInput;
+    
+}
+
+void ByCodeMenu::display() const {
+    
+    std::cout << "Enter the zone code: " << std::endl;
+}
+
+Menu* ByCodeMenu::getNext() {
+
+}
