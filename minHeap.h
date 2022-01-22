@@ -8,8 +8,6 @@
 #define RIGHT(i) (2*(i)+1)
 #define PARENT(i) ((i)/2)
 
-using namespace std;
-
 // Binary min-heap to represent integer keys of type K with values (priorities) of type V
 template <class K, class V>
 class MinHeap {
@@ -20,8 +18,8 @@ class MinHeap {
 
     int size;                  // Number of elements in heap
     int maxSize;               // Maximum number of elements in heap
-    vector<Node> a;            // The heap array
-    unordered_map<K, int> pos; // maps a key into its position on the array a
+    std::vector<Node> a;            // The heap array
+    std::unordered_map<K, int> pos; // maps a key into its position on the array a
     const K KEY_NOT_FOUND;
 
     void upHeap(int i);
