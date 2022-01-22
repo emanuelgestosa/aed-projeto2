@@ -48,9 +48,9 @@ TravelMenu::TravelMenu(const TransportNetwork& network) : Menu(network) {}
 
 void TravelMenu::display() const {
 
-    std::cout << "Welcome to the STCP helper!" << std::endl
+    std::cout << "Welcome to the STCP travel section!" << std::endl
               << "(Please choose an option)" << std::endl
-              << "0. Exit." << std::endl
+              << "0. Back to main menu." << std::endl
               << "1. Enter stop code." << std::endl
               << "2. Enter stop name." << std::endl
               << "3. Enter location." << std::endl;

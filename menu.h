@@ -46,9 +46,10 @@ public:
 };
 
 class TravelMenu : public Menu {
-    TravelMenu(const TransportNetwork& network);
     void display() const override;
     Menu* getNext() override;
+protected:
+    TravelMenu(const TransportNetwork& network);
 };
 
 #endif
