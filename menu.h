@@ -22,6 +22,7 @@ protected:
 public:
 
     Menu(const TransportNetwork& network);
+    virtual ~Menu() {}
 
     /**
      * Displays the current menu.
@@ -41,15 +42,17 @@ public:
 class MainMenu : public Menu {
 public:
     MainMenu(const TransportNetwork& network);
+    virtual ~MainMenu() {}
     void display() const override;
     Menu* getNext() override;
 };
 
 class TravelMenu : public Menu {
-    void display() const override;
-    Menu* getNext() override;
 public:
     TravelMenu(const TransportNetwork& network);
+    virtual ~TravelMenu() {}
+    void display() const override;
+    Menu* getNext() override;
 };
 
 #endif
