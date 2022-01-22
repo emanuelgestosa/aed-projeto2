@@ -37,7 +37,7 @@ Menu* MainMenu::getNext() {
     int choice = getInt();
     switch (choice) {
         case 0: return nullptr;
-        case 1: return this;
+        case 1: return new TravelMenu(network);
         default: return this;
     }
 }

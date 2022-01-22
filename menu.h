@@ -48,7 +48,7 @@ public:
 class TravelMenu : public Menu {
     void display() const override;
     Menu* getNext() override;
-protected:
+public:
     TravelMenu(const TransportNetwork& network);
 };
 
