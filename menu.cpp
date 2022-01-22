@@ -81,7 +81,7 @@ const std::string ByCodeMenu::getCode() const {
 
 void ByCodeMenu::display() const {
     
-    std::cout << "Enter the zone code: " << std::endl;
+    std::cout << "Enter the zone code: ";
 }
 
 Menu* ByCodeMenu::getNext() {
