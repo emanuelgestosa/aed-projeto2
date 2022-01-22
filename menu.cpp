@@ -60,7 +60,7 @@ Menu* TravelMenu::getNext() {
     int choice = getInt();
     switch (choice) {
         case 0: return nullptr;
-        case 1: return this;
+        case 1: return new ByCodeMenu(network);
         case 2: return this;
         case 3: return this;
         default: return this;
@@ -88,5 +88,5 @@ Menu* ByCodeMenu::getNext() {
     std::string code = getCode();
     if (code == "") return nullptr;
     if (code == INVALID_STRING_INPUT) return this;
-    else return this;
+    else return nullptr;
 }
