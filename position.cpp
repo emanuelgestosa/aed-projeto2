@@ -13,7 +13,7 @@ int Position::calcDist(const Position& pos2) const {
     return rad * c;
 }
 
-void Position::setLat(const int lat) { this->lat = lat; }
-void Position::setLong(const int lon) { this->lon = lon; }
-int Position::getLat() const { return lat; }
-int Position::getLon() const { return lon; }
+void Position::setLat(const double lat) { this->lat = lat; }
+void Position::setLon(const double lon) { this->lon = lon; }
+double Position::getLat() const { return lat; }
+double Position::getLon() const { return lon; }

@@ -35,8 +35,8 @@ bool TransportNetwork::readStops() {
         stop.code = line.substr(0, line.find(","));
         stop.name = line.substr(line.find(",") + 1, line.find(",", line.find(",") + 1) - (line.find(",") + 1));
         stop.zone = line.substr(line.find(",", line.find(",") + 1) + 1, line.find(",", line.find(",", line.find(",") + 1) + 1) - (line.find(",", line.find(",") + 1) + 1));
-        position.latitude = stod(line.substr(line.find(",41") + 1, line.find(",-8") - line.find(",41")));
-        position.longitude = stod(line.substr(line.find(",-8") + 1));
+        position.setLat(stod(line.substr(line.find(",41") + 1, line.find(",-8") - line.find(",41"))));
+        position.setLon(stod(line.substr(line.find(",-8") + 1)));
         stop.position = position;
         stops.push_back(stop);
         stopToInt[stop.code] = i - 1;

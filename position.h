@@ -9,10 +9,10 @@ private:
 public:
     int calcDist(const Position& pos2) const;
 
-    void setLat(const int lat);
-    void setLong(const int lon);
-    int getLat() const;
-    int getLon() const;
+    void setLat(const double lat);
+    void setLon(const double lon);
+    double getLat() const;
+    double getLon() const;
 };
 
 #endif
