@@ -81,12 +81,23 @@ const std::string ByCodeMenu::getCode() const {
 
 void ByCodeMenu::display() const {
     
-    std::cout << "Enter the zone code: ";
+    std::cout << "(Enter the zone code)" << std::endl;
 }
 
 Menu* ByCodeMenu::getNext() {
-    std::string code = getCode();
-    if (code == "") return nullptr;
-    if (code == INVALID_STRING_INPUT) return this;
-    else return nullptr;
+    std::cout << "From: ";
+    std::string src = getCode();
+    if (src == "") return nullptr;
+    if (src == INVALID_STRING_INPUT) {
+        std::cout << "Invalid stop." << std::endl;
+        return nullptr;
+    }
+    std::cout << "To:   ";
+    std::string dest = getCode();
+    if (dest == "" || dest == "0") return nullptr;
+    if (dest == INVALID_STRING_INPUT) {
+        std::cout << "Invalid stop." << std::endl;
+        return nullptr;
+    }
+    return nullptr;
 }
