@@ -1,7 +1,6 @@
 #ifndef _TRANSPORT_NETWORK_H_
 #define _TRANSPORT_NETWORK_H_
 
-#include "minHeap.h"
 #include <vector>
 #include <list>
 #include <string>
@@ -9,14 +8,12 @@
 #include <fstream>
 #include <iostream>
 
+#include "minHeap.h"
+#include "position.h"
+
 #define STOPS_FILE "dataset/stops.csv"
 #define LINES_FILE "dataset/lines.csv"
 #define LINE_FILE "dataset/line_"
-
-struct Position {
-    double latitude;
-    double longitude; 
-};
 
 class TransportNetwork {
 
