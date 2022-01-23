@@ -82,7 +82,7 @@ bool TransportNetwork::readLine(const std::string &lineCode, const std::string &
         }
         int dest = stopToInt[stopCode];
         int src = stopToInt[prev];
-        addConnection(src, dest, lineCode, lineName);
+        addConnection(src, dest, lineCode, lineName, stops.at(dest).position.calcDist(stops.at(src).position));
         prev = stopCode;
     }
     return true;
