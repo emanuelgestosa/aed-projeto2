@@ -4,13 +4,13 @@
 #include "menu.h"
 
 int main() {
-    TransportNetwork network;
+    const TransportNetwork network;
     if (!network.getReadSuccess()) {
         std::cout << "Missing files." << std::endl;
         return 1;
     }
     std::stack<Menu*> menus;
-    menus.push(new MainMenu(network));
+    menus.push(new MainMenu(&network));
     while (!menus.empty())
     {
         menus.top()->display();
