@@ -10,7 +10,6 @@ TransportNetwork::TransportNetwork() {
         readSuccess = false;
         return;
     }
-    std::cout << stops.at(2487).adj.front().weight << std::endl;
 }
 
 bool TransportNetwork::getReadSuccess() const {
