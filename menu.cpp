@@ -99,6 +99,5 @@ Menu* ByCodeMenu::getNext() {
         std::cout << "Invalid stop." << std::endl;
         return nullptr;
     }
-    std::cout << network->dijkstraDistance(src, dest) << std::endl;
     return nullptr;
 }

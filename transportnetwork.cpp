@@ -46,6 +46,41 @@ double TransportNetwork::dijkstraDistance(const std::string& code1, const std::s
     else return stops.at(b).dist;
 }
 
+std::list<std::string> TransportNetwork::dijkstraPath(const std::string& code1, const std::string& code2) {
+    int a = stopToInt[code1], b = stopToInt[code2];
+    std::list<std::string> path;
+    const double notFound = -1.0;
+    MinHeap<int, double> heap((int)stops.size(), notFound);
+    for (int i = 1; i <= n; i++) {
+        stops.at(i).dist = 100000.0;
+        stops.at(i).visited = false;
+    }
+    stops.at(a).dist = 0.0;
+    stops.at(a).pred = a;
+    heap.insert(a, 0.0);
+    while (heap.getSize() != 0) {
+        int u = heap.removeMin();
+        stops.at(u).visited = true;
+        for (const auto& e : stops.at(u).adj) {
+            int v = e.dest;
+            if (!stops.at(v).visited && stops.at(u).dist + e.weight < stops.at(v).dist) {
+                stops.at(v).dist = stops.at(u).dist + e.weight;
+                stops.at(v).pred = u;
+                if (!heap.hasKey(v)) heap.insert(v, stops.at(v).dist);
+                else heap.decreaseKey(v, stops.at(v).dist);
+            }
+        }
+    }
+    if (stops.at(b).dist == 100000.0) return path;
+    int pred = b;
+    path.push_front(stops.at(b).code);
+    while (pred != a) {
+        pred = stops.at(pred).pred;
+        path.push_front(stops.at(pred).code);
+    }
+    return path;
+}
+
 bool TransportNetwork::readStops() {
     std::ifstream stopsFile(STOPS_FILE);
     if (!stopsFile.is_open()) return false;

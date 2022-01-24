@@ -49,6 +49,7 @@ public:
     bool getReadSuccess() const;
     bool exists(const std::string& code) const;
     double dijkstraDistance(const std::string& code1, const std::string& code2); 
+    std::list<std::string> dijkstraPath(const std::string& code1, const std::string& code2); 
 };
 
 #endif
