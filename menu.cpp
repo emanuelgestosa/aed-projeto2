@@ -1,6 +1,6 @@
 #include "menu.h"
 
-Menu::Menu(const TransportNetwork& network) { this->network = network; }
+Menu::Menu(TransportNetwork* network) : network(network) {}
 
 int Menu::getInt() const {
 
@@ -23,7 +23,7 @@ int Menu::getInt() const {
 
 /*************************************************************************/
 
-MainMenu::MainMenu(const TransportNetwork& network) : Menu(network) {};
+MainMenu::MainMenu(TransportNetwork* network) : Menu(network) {};
 
 void MainMenu::display() const {
 
@@ -44,7 +44,7 @@ Menu* MainMenu::getNext() {
 
 /*************************************************************************/
 
-TravelMenu::TravelMenu(const TransportNetwork& network) : Menu(network) {}
+TravelMenu::TravelMenu(TransportNetwork* network) : Menu(network) {}
 
 void TravelMenu::display() const {
 
@@ -69,13 +69,13 @@ Menu* TravelMenu::getNext() {
 
 /*************************************************************************/
 
-ByCodeMenu::ByCodeMenu(const TransportNetwork& network) : Menu(network) {}
+ByCodeMenu::ByCodeMenu(TransportNetwork* network) : Menu(network) {}
 
 const std::string ByCodeMenu::getCode() const {
     std::string userInput;
     std::cin >> userInput;
     if (std::cin.eof()) return "";
-    if (!network.exists(userInput)) return INVALID_STRING_INPUT;
+    if (!network->exists(userInput)) return INVALID_STRING_INPUT;
     return userInput;
 }
 

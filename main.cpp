@@ -10,7 +10,7 @@ int main() {
         return 1;
     }
     std::stack<Menu*> menus;
-    menus.push(new MainMenu(network));
+    menus.push(new MainMenu(&network));
     while (!menus.empty())
     {
         menus.top()->display();

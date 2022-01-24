@@ -20,6 +20,67 @@ bool TransportNetwork::exists(const std::string& code) const {
     return stopToInt.find(code) != stopToInt.end();
 }
 
+double TransportNetwork::dijkstraDistance(const std::string& code1, const std::string& code2) {
+    int a = stopToInt[code1], b = stopToInt[code2];
+    const double notFound = -1.0;
+    MinHeap<int, double> heap((int)stops.size(), notFound);
+    for (int i = 1; i <= n; i++) {
+        stops.at(i).dist = 100000.0;
+        stops.at(i).visited = false;
+    }
+    stops.at(a).dist = 0.0;
+    heap.insert(a, 0.0);
+    while (heap.getSize() != 0) {
+        int u = heap.removeMin();
+        stops.at(u).visited = true;
+        for (const auto& e : stops.at(u).adj) {
+            int v = e.dest;
+            if (!stops.at(v).visited && stops.at(u).dist + e.weight < stops.at(v).dist) {
+                stops.at(v).dist = stops.at(u).dist + e.weight;
+                if (!heap.hasKey(v)) heap.insert(v, stops.at(v).dist);
+                else heap.decreaseKey(v, stops.at(v).dist);
+            }
+        }
+    }
+    if (stops.at(b).dist == 100000.0) return -1.0;
+    else return stops.at(b).dist;
+}
+
+std::list<std::string> TransportNetwork::dijkstraPath(const std::string& code1, const std::string& code2) {
+    int a = stopToInt[code1], b = stopToInt[code2];
+    std::list<std::string> path;
+    const double notFound = -1.0;
+    MinHeap<int, double> heap((int)stops.size(), notFound);
+    for (int i = 1; i <= n; i++) {
+        stops.at(i).dist = 100000.0;
+        stops.at(i).visited = false;
+    }
+    stops.at(a).dist = 0.0;
+    stops.at(a).pred = a;
+    heap.insert(a, 0.0);
+    while (heap.getSize() != 0) {
+        int u = heap.removeMin();
+        stops.at(u).visited = true;
+        for (const auto& e : stops.at(u).adj) {
+            int v = e.dest;
+            if (!stops.at(v).visited && stops.at(u).dist + e.weight < stops.at(v).dist) {
+                stops.at(v).dist = stops.at(u).dist + e.weight;
+                stops.at(v).pred = u;
+                if (!heap.hasKey(v)) heap.insert(v, stops.at(v).dist);
+                else heap.decreaseKey(v, stops.at(v).dist);
+            }
+        }
+    }
+    if (stops.at(b).dist == 100000.0) return path;
+    int pred = b;
+    path.push_front(stops.at(b).code);
+    while (pred != a) {
+        pred = stops.at(pred).pred;
+        path.push_front(stops.at(pred).code);
+    }
+    return path;
+}
+
 bool TransportNetwork::readStops() {
     std::ifstream stopsFile(STOPS_FILE);
     if (!stopsFile.is_open()) return false;
@@ -35,13 +96,13 @@ bool TransportNetwork::readStops() {
         stop.code = line.substr(0, line.find(","));
         stop.name = line.substr(line.find(",") + 1, line.find(",", line.find(",") + 1) - (line.find(",") + 1));
         stop.zone = line.substr(line.find(",", line.find(",") + 1) + 1, line.find(",", line.find(",", line.find(",") + 1) + 1) - (line.find(",", line.find(",") + 1) + 1));
-        position.latitude = stod(line.substr(line.find(",41") + 1, line.find(",-8") - line.find(",41")));
-        position.longitude = stod(line.substr(line.find(",-8") + 1));
+        position.setLat(stod(line.substr(line.find(",41") + 1, line.find(",-8") - line.find(",41"))));
+        position.setLon(stod(line.substr(line.find(",-8") + 1)));
         stop.position = position;
         stops.push_back(stop);
         stopToInt[stop.code] = i - 1;
     }
-    n = (int)stops.size();
+    n = (int)stops.size() - 1;
     return true;
 }
 
@@ -82,13 +143,13 @@ bool TransportNetwork::readLine(const std::string &lineCode, const std::string &
         }
         int dest = stopToInt[stopCode];
         int src = stopToInt[prev];
-        addConnection(src, dest, lineCode, lineName);
+        addConnection(src, dest, lineCode, lineName, stops.at(dest).position.calcDist(stops.at(src).position));
         prev = stopCode;
     }
     return true;
 }
 
-void TransportNetwork::addConnection(const int src, const int dest, const std::string& code, const std::string& name, int weight) {
+void TransportNetwork::addConnection(const int src, const int dest, const std::string& code, const std::string& name, double weight) {
     if (src<1 || src>n || dest<1 || dest>n) return;
     stops[src].adj.push_back({dest, weight, code, name});
 }
