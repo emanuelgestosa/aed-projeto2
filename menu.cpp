@@ -1,6 +1,6 @@
 #include "menu.h"
 
-Menu::Menu(const TransportNetwork* network) : network(network) {}
+Menu::Menu(TransportNetwork* network) : network(network) {}
 
 int Menu::getInt() const {
 
@@ -23,7 +23,7 @@ int Menu::getInt() const {
 
 /*************************************************************************/
 
-MainMenu::MainMenu(const TransportNetwork* network) : Menu(network) {};
+MainMenu::MainMenu(TransportNetwork* network) : Menu(network) {};
 
 void MainMenu::display() const {
 
@@ -44,7 +44,7 @@ Menu* MainMenu::getNext() {
 
 /*************************************************************************/
 
-TravelMenu::TravelMenu(const TransportNetwork* network) : Menu(network) {}
+TravelMenu::TravelMenu(TransportNetwork* network) : Menu(network) {}
 
 void TravelMenu::display() const {
 
@@ -69,7 +69,7 @@ Menu* TravelMenu::getNext() {
 
 /*************************************************************************/
 
-ByCodeMenu::ByCodeMenu(const TransportNetwork* network) : Menu(network) {}
+ByCodeMenu::ByCodeMenu(TransportNetwork* network) : Menu(network) {}
 
 const std::string ByCodeMenu::getCode() const {
     std::string userInput;
@@ -99,5 +99,6 @@ Menu* ByCodeMenu::getNext() {
         std::cout << "Invalid stop." << std::endl;
         return nullptr;
     }
+    std::cout << network->dijkstraDistance(src, dest) << std::endl;
     return nullptr;
 }

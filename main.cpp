@@ -4,7 +4,7 @@
 #include "menu.h"
 
 int main() {
-    const TransportNetwork network;
+    TransportNetwork network;
     if (!network.getReadSuccess()) {
         std::cout << "Missing files." << std::endl;
         return 1;

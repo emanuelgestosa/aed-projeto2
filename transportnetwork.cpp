@@ -20,6 +20,32 @@ bool TransportNetwork::exists(const std::string& code) const {
     return stopToInt.find(code) != stopToInt.end();
 }
 
+double TransportNetwork::dijkstraDistance(const std::string& code1, const std::string& code2) {
+    int a = stopToInt[code1], b = stopToInt[code2];
+    const double notFound = -1.0;
+    MinHeap<int, double> heap((int)stops.size(), notFound);
+    for (int i = 1; i <= n; i++) {
+        stops.at(i).dist = 100000.0;
+        stops.at(i).visited = false;
+    }
+    stops.at(a).dist = 0.0;
+    heap.insert(a, 0.0);
+    while (heap.getSize() != 0) {
+        int u = heap.removeMin();
+        stops.at(u).visited = true;
+        for (const auto& e : stops.at(u).adj) {
+            int v = e.dest;
+            if (!stops.at(v).visited && stops.at(u).dist + e.weight < stops.at(v).dist) {
+                stops.at(v).dist = stops.at(u).dist + e.weight;
+                if (!heap.hasKey(v)) heap.insert(v, stops.at(v).dist);
+                else heap.decreaseKey(v, stops.at(v).dist);
+            }
+        }
+    }
+    if (stops.at(b).dist == 100000.0) return -1.0;
+    else return stops.at(b).dist;
+}
+
 bool TransportNetwork::readStops() {
     std::ifstream stopsFile(STOPS_FILE);
     if (!stopsFile.is_open()) return false;
@@ -41,7 +67,7 @@ bool TransportNetwork::readStops() {
         stops.push_back(stop);
         stopToInt[stop.code] = i - 1;
     }
-    n = (int)stops.size();
+    n = (int)stops.size() - 1;
     return true;
 }
 

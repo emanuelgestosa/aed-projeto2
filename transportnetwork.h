@@ -25,7 +25,8 @@ class TransportNetwork {
 
     struct Stop {
         std::list<Connection> adj;
-        int distance, pred;
+        int pred;
+        double dist;
         bool visited;
         std::string name, code, zone;
         Position position;
@@ -47,7 +48,7 @@ public:
     TransportNetwork();
     bool getReadSuccess() const;
     bool exists(const std::string& code) const;
-
+    double dijkstraDistance(const std::string& code1, const std::string& code2); 
 };
 
 #endif

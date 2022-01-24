@@ -10,7 +10,7 @@
 class Menu {
 protected:
 
-    const TransportNetwork* network;
+    TransportNetwork* network;
 
     /**
      * Gets an integer from the user,
@@ -23,7 +23,7 @@ protected:
 
 public:
 
-    Menu(const TransportNetwork* network);
+    Menu(TransportNetwork* network);
     virtual ~Menu() {}
 
     /**
@@ -43,7 +43,7 @@ public:
 
 class MainMenu : public Menu {
 public:
-    MainMenu(const TransportNetwork* network);
+    MainMenu(TransportNetwork* network);
     virtual ~MainMenu() {}
     void display() const override;
     Menu* getNext() override;
@@ -51,7 +51,7 @@ public:
 
 class TravelMenu : public Menu {
 public:
-    TravelMenu(const TransportNetwork* network);
+    TravelMenu(TransportNetwork* network);
     virtual ~TravelMenu() {}
     void display() const override;
     Menu* getNext() override;
@@ -61,7 +61,7 @@ class ByCodeMenu : public Menu {
 private:
     const std::string getCode() const;
 public:
-    ByCodeMenu(const TransportNetwork* network);
+    ByCodeMenu(TransportNetwork* network);
     virtual ~ByCodeMenu() {}
     void display() const override;
     Menu* getNext() override;
