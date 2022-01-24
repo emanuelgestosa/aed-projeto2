@@ -18,7 +18,8 @@
 class TransportNetwork {
 
     struct Connection {
-        int dest, weight;
+        int dest;
+        double weight;
         std::string lineCode, lineName;
     };
 
@@ -39,7 +40,7 @@ class TransportNetwork {
     bool readLines();
     bool readLine(const std::string &lineCode, const std::string &lineName);
     bool readLine(const std::string &lineCode, const std::string &lineName, const std::string& fileName);
-    void addConnection(const int src, const int dest, const std::string& code, const std::string& name, int weight = 1);
+    void addConnection(const int src, const int dest, const std::string& code, const std::string& name, double weight = 1.0);
 
 public:
 

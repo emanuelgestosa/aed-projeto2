@@ -7,7 +7,7 @@ class Position {
 private:
     double lat, lon;
 public:
-    int calcDist(const Position& pos2) const;
+    double calcDist(const Position& pos2) const;
 
     void setLat(const double lat);
     void setLon(const double lon);

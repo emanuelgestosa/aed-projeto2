@@ -1,6 +1,6 @@
 #include "position.h"
 
-int Position::calcDist(const Position& pos2) const {
+double Position::calcDist(const Position& pos2) const {
     double dLat = (pos2.getLat() - lat) * M_PI / 180.0;
     double dLong = (pos2.getLon() - lon) * M_PI / 180.0;
 

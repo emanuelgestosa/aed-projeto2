@@ -10,6 +10,7 @@ TransportNetwork::TransportNetwork() {
         readSuccess = false;
         return;
     }
+    std::cout << stops.at(2487).adj.front().weight << std::endl;
 }
 
 bool TransportNetwork::getReadSuccess() const {
@@ -88,7 +89,7 @@ bool TransportNetwork::readLine(const std::string &lineCode, const std::string &
     return true;
 }
 
-void TransportNetwork::addConnection(const int src, const int dest, const std::string& code, const std::string& name, int weight) {
+void TransportNetwork::addConnection(const int src, const int dest, const std::string& code, const std::string& name, double weight) {
     if (src<1 || src>n || dest<1 || dest>n) return;
     stops[src].adj.push_back({dest, weight, code, name});
 }
