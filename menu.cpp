@@ -99,5 +99,6 @@ Menu* ByCodeMenu::getNext() {
         std::cout << "Invalid stop." << std::endl;
         return nullptr;
     }
+    std::cout << network->bfsDistance(src, dest) << std::endl;
     return nullptr;
 }
