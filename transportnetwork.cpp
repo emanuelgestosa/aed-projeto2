@@ -81,13 +81,13 @@ std::list<std::string> TransportNetwork::dijkstraPath(const std::string& code1, 
     return path;
 }
 
-int TransportNetwork::bfsDistance(const std::string& code1, const std::string& code2) {
+double TransportNetwork::bfsDistance(const std::string& code1, const std::string& code2) {
     int a = stopToInt[code1], b = stopToInt[code2];
     for (int v = 1; v <= n; v++) stops.at(v).visited = false;
     std::queue<int> q;
     q.push(a);
     stops.at(b).dist = -1;
-    stops.at(a).dist = 0;
+    stops.at(a).dist = 0.0;
     stops.at(a).visited = true;
     while (!q.empty()) {
         int u = q.front(); q.pop();

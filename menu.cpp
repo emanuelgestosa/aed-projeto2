@@ -139,7 +139,13 @@ LeastDistMenu::LeastDistMenu(TransportNetwork* network, const std::string& stop1
 }
 
 void LeastDistMenu::display() const {
-    std::cout << "(Enter '0' to go back)" << std::endl;
+    auto path = network->dijkstraPath(stop1, stop2);
+    double dist = network->dijkstraDistance(stop1, stop2);
+
+    std::cout << "From " << stop1 << " to " << stop2 << std::endl
+              << "you travelled " << dist << " km" << std::endl
+              << "and passed through " << path.size() << " stops" << std::endl
+              <<"(Enter '0' to go back)" << std::endl;
 }
 
 Menu* LeastDistMenu::getNext() {
@@ -155,7 +161,13 @@ LeastStopsMenu::LeastStopsMenu(TransportNetwork* network, const std::string& sto
 }
 
 void LeastStopsMenu::display() const {
-    std::cout << "(Enter '0' to go back)" << std::endl;
+    auto path = network->bfsPath(stop1, stop2);
+    double dist = network->bfsDistance(stop1, stop2);
+
+    std::cout << "From " << stop1 << " to " << stop2 << std::endl
+              << "you travelled " << dist << " km" << std::endl
+              << "and passed through " << path.size() << " stops" << std::endl
+              <<"(Enter '0' to go back)" << std::endl;
 }
 
 Menu* LeastStopsMenu::getNext() {
