@@ -52,6 +52,7 @@ public:
     double dijkstraDistance(const std::string& code1, const std::string& code2); 
     std::list<std::string> dijkstraPath(const std::string& code1, const std::string& code2); 
     int bfsDistance(const std::string& code1, const std::string& code2);
+    std::list<std::string> bfsPath(const std::string& code1, const std::string& code2);
 };
 
 #endif

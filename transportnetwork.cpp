@@ -103,6 +103,38 @@ int TransportNetwork::bfsDistance(const std::string& code1, const std::string& c
     return stops.at(b).dist;
 } 
 
+std::list<std::string> TransportNetwork::bfsPath(const std::string& code1, const std::string& code2) {
+    int a = stopToInt[code1], b = stopToInt[code2];
+    std::list<std::string> path;
+    for (int v = 1; v <= n; v++) stops.at(v).visited = false;
+    std::queue<int> q;
+    q.push(a);
+    stops.at(b).dist = -1;
+    stops.at(a).dist = 0;
+    stops.at(a).visited = true;
+    stops.at(a).pred = a;
+    while (!q.empty()) {
+        int u = q.front(); q.pop();
+        for (auto& e : stops.at(u).adj) {
+            int w = e.dest;
+            if (!stops.at(w).visited) {
+                q.push(w);
+                stops.at(w).visited = true;
+                stops.at(w).dist = stops.at(u).dist + 1;
+                stops.at(w).pred = u;
+            }
+        }
+    }
+    if (stops.at(b).dist == -1) return path;
+    int pred = b;
+    path.push_front(stops.at(b).code);
+    while (pred != a) {
+        pred = stops.at(pred).pred;
+        path.push_front(stops.at(pred).code);
+    }
+    return path;
+}
+
 bool TransportNetwork::readStops() {
     std::ifstream stopsFile(STOPS_FILE);
     if (!stopsFile.is_open()) return false;
