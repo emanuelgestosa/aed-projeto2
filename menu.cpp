@@ -143,8 +143,8 @@ void LeastDistMenu::display() const {
     double dist = network->dijkstraDistance(stop1, stop2);
 
     std::cout << "From " << stop1 << " to " << stop2 << std::endl
-              << "you travelled " << dist << " km" << std::endl
-              << "and passed through " << path.size() << " stops" << std::endl
+              << "you will travel " << dist << " km" << std::endl
+              << "and pass through " << path.size() << " stops" << std::endl
               <<"(Enter '0' to go back)" << std::endl;
 }
 
@@ -165,8 +165,8 @@ void LeastStopsMenu::display() const {
     double dist = network->bfsDistance(stop1, stop2);
 
     std::cout << "From " << stop1 << " to " << stop2 << std::endl
-              << "you travelled " << dist << " km" << std::endl
-              << "and passed through " << path.size() << " stops" << std::endl
+              << "you will travel " << dist << " km" << std::endl
+              << "and pass through " << path.size() << " stops" << std::endl
               <<"(Enter '0' to go back)" << std::endl;
 }
 
