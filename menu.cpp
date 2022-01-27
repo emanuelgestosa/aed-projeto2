@@ -60,7 +60,7 @@ Menu* TravelMenu::getNext() {
     int choice = getInt();
     switch (choice) {
         case 0: return nullptr;
-        case 1: return new ByCodeMenu(network);
+        case 1: return new ByCodeMenu(network, false);
         case 2: return this;
         case 3: return this;
         default: return this;
@@ -69,7 +69,9 @@ Menu* TravelMenu::getNext() {
 
 /*************************************************************************/
 
-ByCodeMenu::ByCodeMenu(TransportNetwork* network) : Menu(network) {}
+ByCodeMenu::ByCodeMenu(TransportNetwork* network, bool goBack) : Menu(network) {
+    this->goBack = goBack;
+}
 
 const std::string ByCodeMenu::getCode() const {
     std::string userInput;
@@ -80,11 +82,12 @@ const std::string ByCodeMenu::getCode() const {
 }
 
 void ByCodeMenu::display() const {
-    
+    if (goBack) return;
     std::cout << "(Enter the zone code)" << std::endl;
 }
 
 Menu* ByCodeMenu::getNext() {
+    if (goBack) return nullptr;
     std::cout << "From: ";
     std::string src = getCode();
     if (src == "") return nullptr;
@@ -99,5 +102,29 @@ Menu* ByCodeMenu::getNext() {
         std::cout << "Invalid stop." << std::endl;
         return nullptr;
     }
-    return nullptr;
+    goBack = true;
+    return new RouteMenu(network, src, dest);
+}
+
+/*************************************************************************/
+
+RouteMenu::RouteMenu(TransportNetwork* network, const std::string& stop1, std::string& stop2) : Menu(network) {
+    this->stop1 = stop1;
+    this->stop2 = stop2;
+}
+
+void RouteMenu::display() const {
+    std::cout << "Travel from " << stop1 << " to " << stop2 << std::endl
+              << "(Please choose an option)" << std::endl
+              << "0. Back to travel menu." << std::endl
+              << "1. Least distance travelled." << std::endl
+              << "2. Least stops visited" << std::endl;
+}
+
+Menu* RouteMenu::getNext() {
+    int choice = getInt();
+    switch (choice) {
+        case 0: return nullptr;
+        default: return this;
+    }
 }

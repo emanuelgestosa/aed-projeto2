@@ -59,10 +59,20 @@ public:
 
 class ByCodeMenu : public Menu {
 private:
+    bool goBack;
     const std::string getCode() const;
 public:
-    ByCodeMenu(TransportNetwork* network);
+    ByCodeMenu(TransportNetwork* network, bool goBack = true);
     virtual ~ByCodeMenu() {}
+    void display() const override;
+    Menu* getNext() override;
+};
+
+class RouteMenu : public Menu {
+    std::string stop1, stop2;
+public:
+    RouteMenu(TransportNetwork* network, const std::string& stop1, std::string& stop2);
+    virtual ~RouteMenu() {}
     void display() const override;
     Menu* getNext() override;
 };
