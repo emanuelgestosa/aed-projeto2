@@ -96,7 +96,7 @@ int TransportNetwork::bfsDistance(const std::string& code1, const std::string& c
             if (!stops.at(w).visited) {
                 q.push(w);
                 stops.at(w).visited = true;
-                stops.at(w).dist = stops.at(u).dist + 1;
+                stops.at(w).dist = stops.at(u).dist + e.weight;
             }
         }
     }

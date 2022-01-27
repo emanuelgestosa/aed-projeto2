@@ -125,6 +125,40 @@ Menu* RouteMenu::getNext() {
     int choice = getInt();
     switch (choice) {
         case 0: return nullptr;
+        case 1: return new LeastDistMenu(network, stop1, stop2);
+        case 2: return new LeastStopsMenu(network, stop1, stop2);
         default: return this;
     }
+}
+
+/*************************************************************************/
+
+LeastDistMenu::LeastDistMenu(TransportNetwork* network, const std::string& stop1, std::string& stop2) : Menu(network) {
+    this->stop1 = stop1;
+    this->stop2 = stop2;
+}
+
+void LeastDistMenu::display() const {
+    std::cout << "(Enter '0' to go back)" << std::endl;
+}
+
+Menu* LeastDistMenu::getNext() {
+    getInt();
+    return nullptr;
+}
+
+/*************************************************************************/
+
+LeastStopsMenu::LeastStopsMenu(TransportNetwork* network, const std::string& stop1, std::string& stop2) : Menu(network) {
+    this->stop1 = stop1;
+    this->stop2 = stop2;
+}
+
+void LeastStopsMenu::display() const {
+    std::cout << "(Enter '0' to go back)" << std::endl;
+}
+
+Menu* LeastStopsMenu::getNext() {
+    getInt();
+    return nullptr;
 }
