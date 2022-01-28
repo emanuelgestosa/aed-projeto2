@@ -197,13 +197,20 @@ bool TransportNetwork::readLine(const std::string &lineCode, const std::string &
         }
         int dest = stopToInt[stopCode];
         int src = stopToInt[prev];
-        addConnection(src, dest, lineCode, lineName, stops.at(dest).position.calcDist(stops.at(src).position));
+        addConnection(src, dest, lineCode, stops.at(dest).position.calcDist(stops.at(src).position));
         prev = stopCode;
     }
     return true;
 }
 
-void TransportNetwork::addConnection(const int src, const int dest, const std::string& code, const std::string& name, double weight) {
+void TransportNetwork::addConnection(const int src, const int dest, const std::string& code, double weight) {
     if (src<1 || src>n || dest<1 || dest>n) return;
-    stops[src].adj.push_back({dest, weight, code, name});
+    bool hasConn = false;
+    for (auto& a : stops.at(src).adj)
+        if (a.dest == dest) {
+            a.lineCodes.push_back(code);
+            hasConn = true;
+            break;
+        }
+    if (!hasConn) stops.at(src).adj.push_back({dest, weight, {code}});
 }
