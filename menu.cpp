@@ -7,9 +7,8 @@ int Menu::getInt() const {
     int userInput;
     std::cin >> userInput;
 
-    if(std::cin.fail())
-    {
-        if(std::cin.eof())
+    if (std::cin.fail()) {
+        if (std::cin.eof())
             return 0;
 
         std::cin.clear();
@@ -30,7 +29,8 @@ void MainMenu::display() const {
     std::cout << "Welcome to the STCP helper!" << std::endl
               << "(Please choose an option)" << std::endl
               << "0. Exit." << std::endl
-              << "1. Travel" << std::endl;
+              << "1. Travel." << std::endl
+              << "2. Special journey." << std::endl;
 }
 
 Menu* MainMenu::getNext() {
@@ -38,6 +38,7 @@ Menu* MainMenu::getNext() {
     switch (choice) {
         case 0: return nullptr;
         case 1: return new TravelMenu(network);
+        case 2: return new SpecialMenu(network);
         default: return this;
     }
 }
@@ -52,8 +53,7 @@ void TravelMenu::display() const {
               << "(Please choose an option)" << std::endl
               << "0. Back to main menu." << std::endl
               << "1. Enter stop code." << std::endl
-              << "2. Enter stop name." << std::endl
-              << "3. Enter location." << std::endl;
+              << "2. Enter location." << std::endl;
 }
 
 Menu* TravelMenu::getNext() {
@@ -61,8 +61,7 @@ Menu* TravelMenu::getNext() {
     switch (choice) {
         case 0: return nullptr;
         case 1: return new ByCodeMenu(network, false);
-        case 2: return this;
-        case 3: return this;
+        case 2: return new ByPosMenu(network, false);
         default: return this;
     }
 }
@@ -83,7 +82,7 @@ const std::string ByCodeMenu::getCode() const {
 
 void ByCodeMenu::display() const {
     if (goBack) return;
-    std::cout << "(Enter the zone code)" << std::endl;
+    std::cout << "(Enter the stop code)" << std::endl;
 }
 
 Menu* ByCodeMenu::getNext() {
@@ -108,7 +107,87 @@ Menu* ByCodeMenu::getNext() {
 
 /*************************************************************************/
 
-RouteMenu::RouteMenu(TransportNetwork* network, const std::string& stop1, std::string& stop2) : Menu(network) {
+ByPosMenu::ByPosMenu(TransportNetwork* network, bool goBack) : Menu(network) {
+    this->goBack = goBack;
+}
+
+Position ByPosMenu::getPos() const {
+    Position eofPos; eofPos.setLat(0); eofPos.setLon(0);
+    Position invPos; invPos.setLat(-1); invPos.setLon(-1);
+    double lat, lon;
+    std::cin >> lat >> lon;
+    if(std::cin.fail()) {
+        if(std::cin.eof())
+            return eofPos;
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        return invPos;
+    }
+    Position pos; pos.setLat(lat); pos.setLon(lon);
+    return pos;
+}
+
+void ByPosMenu::display() const {
+    if (goBack) return;
+    std::cout << "(Enter the position)" << std::endl;
+}
+
+Menu* ByPosMenu::getNext() {
+    if (goBack) return nullptr;
+    std::cout << "From (latitude longitude): ";
+    Position src = getPos();
+    if (src.getLat() == -1 && src.getLon() == -1) {
+        std::cout << "Invalid position." << std::endl;
+        return nullptr;
+    } if (src.getLat() == 0 && src.getLon() == 0) return nullptr;
+
+    std::cout << "To (latitude longitude): ";
+    Position dest = getPos();
+    if (dest.getLat() == -1 && dest.getLon() == -1) {
+        std::cout << "Invalid position." << std::endl;
+        return nullptr;
+    } if (dest.getLat() == 0 && dest.getLon() == 0) return nullptr;
+    goBack = true;
+    return new ChooseStopMenu(network, src, dest, false);
+}
+
+/*************************************************************************/
+
+ChooseStopMenu::ChooseStopMenu(TransportNetwork* network, Position pos1, Position pos2, bool goBack) : Menu(network) {
+    this->goBack = goBack;
+    this->pos1 = pos1;
+    this->pos2 = pos2;
+}
+
+void ChooseStopMenu::display() const {
+    if (goBack) return;
+}
+
+Menu* ChooseStopMenu::getNext() {
+    if (goBack) return nullptr;
+    std::cout << "From:" << std::endl
+              << "(Please choose an option)" << std::endl;
+    auto srcStops = network->findNearestStops(pos1);
+    auto destStops = network->findNearestStops(pos2);
+    std::cout << "0. Exit." << std::endl;
+    for (int i = 0; i < srcStops.size(); i++) std::cout << i+1 << ". " << srcStops.at(i) << std::endl;
+    int choice1 = getInt();
+    if (choice1 == 0) return nullptr;
+    if (choice1 == -1) return this;
+
+    std::cout << "To:" << std::endl
+              << "(Please choose an option)" << std::endl << std::endl;
+    std::cout << "0. Exit." << std::endl;
+    for (int i = 0; i < destStops.size(); i++) std::cout << i+1 << ". " << destStops.at(i) << std::endl;
+    int choice2 = getInt();
+    if (choice2 == 0) return nullptr;
+    if (choice2 == -1) return this;
+    return new RouteMenu(network, srcStops.at(choice1 - 1), destStops.at(choice2 - 1));
+}
+
+/*************************************************************************/
+
+RouteMenu::RouteMenu(TransportNetwork* network, const std::string& stop1, const std::string& stop2) : Menu(network) {
     this->stop1 = stop1;
     this->stop2 = stop2;
 }
@@ -118,7 +197,7 @@ void RouteMenu::display() const {
               << "(Please choose an option)" << std::endl
               << "0. Back to travel menu." << std::endl
               << "1. Least distance travelled." << std::endl
-              << "2. Least stops visited" << std::endl;
+              << "2. Least stops visited." << std::endl;
 }
 
 Menu* RouteMenu::getNext() {
@@ -133,7 +212,7 @@ Menu* RouteMenu::getNext() {
 
 /*************************************************************************/
 
-LeastDistMenu::LeastDistMenu(TransportNetwork* network, const std::string& stop1, std::string& stop2) : Menu(network) {
+LeastDistMenu::LeastDistMenu(TransportNetwork* network, const std::string& stop1, const std::string& stop2) : Menu(network) {
     this->stop1 = stop1;
     this->stop2 = stop2;
 }
@@ -188,7 +267,7 @@ Menu* LeastDistMenu::getNext() {
 
 /*************************************************************************/
 
-LeastStopsMenu::LeastStopsMenu(TransportNetwork* network, const std::string& stop1, std::string& stop2) : Menu(network) {
+LeastStopsMenu::LeastStopsMenu(TransportNetwork* network, const std::string& stop1, const std::string& stop2) : Menu(network) {
     this->stop1 = stop1;
     this->stop2 = stop2;
 }
@@ -239,4 +318,25 @@ void LeastStopsMenu::display() const {
 Menu* LeastStopsMenu::getNext() {
     getInt();
     return nullptr;
+}
+
+/*************************************************************************/
+
+SpecialMenu::SpecialMenu(TransportNetwork* network) : Menu(network) {}
+
+void SpecialMenu::display() const {
+    std::cout << "Welcome to the special journey menu!" << std::endl
+              << "Here you can choose a stop as start point" << std::endl
+              << "and visit every stop in our network!" << std::endl
+              << "(Please choose an option)" << std::endl
+              << "0. Back to main menu." << std::endl
+              << "1. Pick starting point." << std::endl;
+}
+
+Menu* SpecialMenu::getNext() {
+    int choice = getInt();
+    switch (choice) {
+        case 0: return nullptr;
+        default: return this;
+    }
 }

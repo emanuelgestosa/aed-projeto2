@@ -69,10 +69,31 @@ public:
     Menu* getNext() override;
 };
 
+class ByPosMenu : public Menu {
+private:
+    bool goBack;
+    Position getPos() const;
+public:
+    ByPosMenu(TransportNetwork* network, bool goBack = true);
+    virtual ~ByPosMenu() {}
+    void display() const override;
+    Menu* getNext() override;
+};
+
+class ChooseStopMenu : public Menu {
+    bool goBack;
+    Position pos1, pos2;
+public:
+    ChooseStopMenu(TransportNetwork* network, Position pos1, Position pos2, bool goBack = true);
+    virtual ~ChooseStopMenu() {}
+    void display() const override;
+    Menu* getNext() override;
+};
+
 class RouteMenu : public Menu {
     std::string stop1, stop2;
 public:
-    RouteMenu(TransportNetwork* network, const std::string& stop1, std::string& stop2);
+    RouteMenu(TransportNetwork* network, const std::string& stop1, const std::string& stop2);
     virtual ~RouteMenu() {}
     void display() const override;
     Menu* getNext() override;
@@ -81,7 +102,7 @@ public:
 class LeastDistMenu : public Menu {
     std::string stop1, stop2;
 public:
-    LeastDistMenu(TransportNetwork* network, const std::string& stop1, std::string& stop2);
+    LeastDistMenu(TransportNetwork* network, const std::string& stop1, const std::string& stop2);
     virtual ~LeastDistMenu() {}
     void display() const override;
     Menu* getNext() override;
@@ -90,8 +111,16 @@ public:
 class LeastStopsMenu : public Menu {
     std::string stop1, stop2;
 public:
-    LeastStopsMenu(TransportNetwork* network, const std::string& stop1, std::string& stop2);
+    LeastStopsMenu(TransportNetwork* network, const std::string& stop1, const std::string& stop2);
     virtual ~LeastStopsMenu() {}
+    void display() const override;
+    Menu* getNext() override;
+};
+
+class SpecialMenu : public Menu {
+public:
+    SpecialMenu(TransportNetwork* network);
+    virtual ~SpecialMenu() {}
     void display() const override;
     Menu* getNext() override;
 };
