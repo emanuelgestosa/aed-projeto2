@@ -52,8 +52,7 @@ void TravelMenu::display() const {
               << "(Please choose an option)" << std::endl
               << "0. Back to main menu." << std::endl
               << "1. Enter stop code." << std::endl
-              << "2. Enter stop name." << std::endl
-              << "3. Enter location." << std::endl;
+              << "2. Enter location." << std::endl;
 }
 
 Menu* TravelMenu::getNext() {
@@ -62,7 +61,6 @@ Menu* TravelMenu::getNext() {
         case 0: return nullptr;
         case 1: return new ByCodeMenu(network, false);
         case 2: return this;
-        case 3: return this;
         default: return this;
     }
 }
