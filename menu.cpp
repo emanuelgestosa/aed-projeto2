@@ -60,7 +60,7 @@ Menu* TravelMenu::getNext() {
     int choice = getInt();
     switch (choice) {
         case 0: return nullptr;
-        case 1: return new ByCodeMenu(network);
+        case 1: return new ByCodeMenu(network, false);
         case 2: return this;
         case 3: return this;
         default: return this;
@@ -69,7 +69,9 @@ Menu* TravelMenu::getNext() {
 
 /*************************************************************************/
 
-ByCodeMenu::ByCodeMenu(TransportNetwork* network) : Menu(network) {}
+ByCodeMenu::ByCodeMenu(TransportNetwork* network, bool goBack) : Menu(network) {
+    this->goBack = goBack;
+}
 
 const std::string ByCodeMenu::getCode() const {
     std::string userInput;
@@ -80,11 +82,12 @@ const std::string ByCodeMenu::getCode() const {
 }
 
 void ByCodeMenu::display() const {
-    
+    if (goBack) return;
     std::cout << "(Enter the zone code)" << std::endl;
 }
 
 Menu* ByCodeMenu::getNext() {
+    if (goBack) return nullptr;
     std::cout << "From: ";
     std::string src = getCode();
     if (src == "") return nullptr;
@@ -99,6 +102,141 @@ Menu* ByCodeMenu::getNext() {
         std::cout << "Invalid stop." << std::endl;
         return nullptr;
     }
-    std::cout << network->bfsDistance(src, dest) << std::endl;
+    goBack = true;
+    return new RouteMenu(network, src, dest);
+}
+
+/*************************************************************************/
+
+RouteMenu::RouteMenu(TransportNetwork* network, const std::string& stop1, std::string& stop2) : Menu(network) {
+    this->stop1 = stop1;
+    this->stop2 = stop2;
+}
+
+void RouteMenu::display() const {
+    std::cout << "Travel from " << stop1 << " to " << stop2 << std::endl
+              << "(Please choose an option)" << std::endl
+              << "0. Back to travel menu." << std::endl
+              << "1. Least distance travelled." << std::endl
+              << "2. Least stops visited" << std::endl;
+}
+
+Menu* RouteMenu::getNext() {
+    int choice = getInt();
+    switch (choice) {
+        case 0: return nullptr;
+        case 1: return new LeastDistMenu(network, stop1, stop2);
+        case 2: return new LeastStopsMenu(network, stop1, stop2);
+        default: return this;
+    }
+}
+
+/*************************************************************************/
+
+LeastDistMenu::LeastDistMenu(TransportNetwork* network, const std::string& stop1, std::string& stop2) : Menu(network) {
+    this->stop1 = stop1;
+    this->stop2 = stop2;
+}
+
+void LeastDistMenu::display() const {
+    auto path = network->dijkstraPath(stop1, stop2);
+    double dist = network->dijkstraDistance(stop1, stop2);
+
+    std::cout << "From " << stop1 << " to " << stop2 << std::endl
+              << "you will travel " << dist << " km" << std::endl
+              << "and pass through " << path.size() << " stops" << std::endl
+              <<"(Enter '0' to go back)" << std::endl;
+
+    std::list<std::string> linePath;
+    std::set<std::string> lines = network->getLines();
+    std::set<std::string> oldLines;
+    std::string lastStop;
+    std::vector<std::string> intersect;
+    for (auto i : path) {
+        if (i.second.empty()) i.second = network->getLines();
+        intersect.clear();
+        std::set_intersection(lines.begin(), lines.end(), 
+                              i.second.begin(), i.second.end(), 
+                              std::back_inserter(intersect));
+        lines.clear();
+        for (auto a : intersect) lines.insert(a);
+        if (lines.empty()) {
+            lines = i.second;
+            if (!linePath.empty()) {
+                std::cout << *(oldLines.begin()) << " ";
+                for (auto l : linePath) std::cout << l << " ";
+                std::cout << std::endl;
+            }
+            linePath.clear();
+            linePath.push_back(lastStop);
+        } 
+        linePath.push_back(i.first);
+        oldLines = lines;
+        lastStop = i.first;
+    }
+    if (!linePath.empty()) {
+        std::cout << *(path.back().second.begin()) << " ";
+        for (auto l : linePath) std::cout << l << " ";
+        std::cout << std::endl;
+    }
+}
+
+Menu* LeastDistMenu::getNext() {
+    getInt();
+    return nullptr;
+}
+
+/*************************************************************************/
+
+LeastStopsMenu::LeastStopsMenu(TransportNetwork* network, const std::string& stop1, std::string& stop2) : Menu(network) {
+    this->stop1 = stop1;
+    this->stop2 = stop2;
+}
+
+void LeastStopsMenu::display() const {
+    auto path = network->bfsPath(stop1, stop2);
+    double dist = network->bfsDistance(stop1, stop2);
+
+    std::cout << "From " << stop1 << " to " << stop2 << std::endl
+              << "you will travel " << dist << " km" << std::endl
+              << "and pass through " << path.size() << " stops" << std::endl
+              <<"(Enter '0' to go back)" << std::endl;
+
+    std::list<std::string> linePath;
+    std::set<std::string> lines = network->getLines();
+    std::set<std::string> oldLines;
+    std::string lastStop;
+    std::vector<std::string> intersect;
+    for (auto i : path) {
+        if (i.second.empty()) i.second = network->getLines();
+        intersect.clear();
+        std::set_intersection(lines.begin(), lines.end(), 
+                              i.second.begin(), i.second.end(), 
+                              std::back_inserter(intersect));
+        lines.clear();
+        for (auto a : intersect) lines.insert(a);
+        if (lines.empty()) {
+            lines = i.second;
+            if (!linePath.empty()) {
+                std::cout << *(oldLines.begin()) << " ";
+                for (auto l : linePath) std::cout << l << " ";
+                std::cout << std::endl;
+            }
+            linePath.clear();
+            linePath.push_back(lastStop);
+        } 
+        linePath.push_back(i.first);
+        oldLines = lines;
+        lastStop = i.first;
+    }
+    if (!linePath.empty()) {
+        std::cout << *(path.back().second.begin()) << " ";
+        for (auto l : linePath) std::cout << l << " ";
+        std::cout << std::endl;
+    }
+}
+
+Menu* LeastStopsMenu::getNext() {
+    getInt();
     return nullptr;
 }

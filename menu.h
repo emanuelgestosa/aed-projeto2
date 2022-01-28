@@ -2,6 +2,7 @@
 #define MENU_H
 
 #include <limits>
+#include <bits/stdc++.h>
 
 #include "transportnetwork.h"
 
@@ -59,10 +60,38 @@ public:
 
 class ByCodeMenu : public Menu {
 private:
+    bool goBack;
     const std::string getCode() const;
 public:
-    ByCodeMenu(TransportNetwork* network);
+    ByCodeMenu(TransportNetwork* network, bool goBack = true);
     virtual ~ByCodeMenu() {}
+    void display() const override;
+    Menu* getNext() override;
+};
+
+class RouteMenu : public Menu {
+    std::string stop1, stop2;
+public:
+    RouteMenu(TransportNetwork* network, const std::string& stop1, std::string& stop2);
+    virtual ~RouteMenu() {}
+    void display() const override;
+    Menu* getNext() override;
+};
+
+class LeastDistMenu : public Menu {
+    std::string stop1, stop2;
+public:
+    LeastDistMenu(TransportNetwork* network, const std::string& stop1, std::string& stop2);
+    virtual ~LeastDistMenu() {}
+    void display() const override;
+    Menu* getNext() override;
+};
+
+class LeastStopsMenu : public Menu {
+    std::string stop1, stop2;
+public:
+    LeastStopsMenu(TransportNetwork* network, const std::string& stop1, std::string& stop2);
+    virtual ~LeastStopsMenu() {}
     void display() const override;
     Menu* getNext() override;
 };
