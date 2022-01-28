@@ -32,6 +32,8 @@ double TransportNetwork::dijkstraDistance(const std::string& code1, const std::s
     for (int i = 1; i <= n; i++) {
         stops.at(i).dist = 100000.0;
         stops.at(i).visited = false;
+        std::set<std::string> empty;
+        std::swap(stops.at(i).lines, empty);
     }
     stops.at(a).dist = 0.0;
     heap.insert(a, 0.0);
@@ -41,6 +43,7 @@ double TransportNetwork::dijkstraDistance(const std::string& code1, const std::s
         for (const auto& e : stops.at(u).adj) {
             int v = e.dest;
             if (!stops.at(v).visited && stops.at(u).dist + e.weight < stops.at(v).dist) {
+                if (stops.at(u).lines.find("WALK") != stops.at(u).lines.end() && e.lineCodes.find("WALK") != e.lineCodes.end()) continue;
                 stops.at(v).dist = stops.at(u).dist + e.weight;
                 if (!heap.hasKey(v)) heap.insert(v, stops.at(v).dist);
                 else heap.decreaseKey(v, stops.at(v).dist);
@@ -60,6 +63,8 @@ std::list<std::pair<std::string, std::set<std::string>>> TransportNetwork::dijks
     for (int i = 1; i <= n; i++) {
         stops.at(i).dist = 100000.0;
         stops.at(i).visited = false;
+        std::set<std::string> empty;
+        std::swap(stops.at(i).lines, empty);
     }
     stops.at(a).dist = 0.0;
     stops.at(a).pred = a;
@@ -91,7 +96,11 @@ std::list<std::pair<std::string, std::set<std::string>>> TransportNetwork::dijks
 
 double TransportNetwork::bfsDistance(const std::string& code1, const std::string& code2) {
     int a = stopToInt[code1], b = stopToInt[code2];
-    for (int v = 1; v <= n; v++) stops.at(v).visited = false;
+    for (int v = 1; v <= n; v++) {
+        stops.at(v).visited = false;
+        std::set<std::string> empty;
+        std::swap(stops.at(v).lines, empty);
+    }
     std::queue<int> q;
     q.push(a);
     stops.at(b).dist = -1;
@@ -102,6 +111,7 @@ double TransportNetwork::bfsDistance(const std::string& code1, const std::string
         for (auto& e : stops.at(u).adj) {
             int w = e.dest;
             if (!stops.at(w).visited) {
+                if (stops.at(u).lines.find("WALK") != stops.at(u).lines.end() && e.lineCodes.find("WALK") != e.lineCodes.end()) continue;
                 q.push(w);
                 stops.at(w).visited = true;
                 stops.at(w).dist = stops.at(u).dist + e.weight;
@@ -115,7 +125,11 @@ std::list<std::pair<std::string, std::set<std::string>>> TransportNetwork::bfsPa
     int a = stopToInt[code1], b = stopToInt[code2];
     std::list<std::pair<std::string, std::set<std::string>>> path;
     if (a == b) return path;
-    for (int v = 1; v <= n; v++) stops.at(v).visited = false;
+    for (int v = 1; v <= n; v++) {
+        stops.at(v).visited = false;
+        std::set<std::string> empty;
+        std::swap(stops.at(v).lines, empty);
+    }
     std::queue<int> q;
     q.push(a);
     stops.at(b).dist = -1;

@@ -162,19 +162,19 @@ void LeastDistMenu::display() const {
         for (auto a : intersect) lines.insert(a);
         if (lines.empty()) {
             lines = i.second;
-            if (!linePath.empty()) {
+            if (linePath.size() > 1) {
                 std::cout << *(oldLines.begin()) << " ";
                 for (auto l : linePath) std::cout << l << " ";
                 std::cout << std::endl;
             }
             linePath.clear();
-            linePath.push_back(lastStop);
+            if (!lastStop.empty()) linePath.push_back(lastStop);
         } 
         linePath.push_back(i.first);
         oldLines = lines;
         lastStop = i.first;
     }
-    if (!linePath.empty()) {
+    if (linePath.size() > 1) {
         std::cout << *(path.back().second.begin()) << " ";
         for (auto l : linePath) std::cout << l << " ";
         std::cout << std::endl;
@@ -217,19 +217,19 @@ void LeastStopsMenu::display() const {
         for (auto a : intersect) lines.insert(a);
         if (lines.empty()) {
             lines = i.second;
-            if (!linePath.empty()) {
+            if (linePath.size() > 1) {
                 std::cout << *(oldLines.begin()) << " ";
                 for (auto l : linePath) std::cout << l << " ";
                 std::cout << std::endl;
             }
             linePath.clear();
-            linePath.push_back(lastStop);
+            if (!lastStop.empty()) linePath.push_back(lastStop);
         } 
         linePath.push_back(i.first);
         oldLines = lines;
         lastStop = i.first;
     }
-    if (!linePath.empty()) {
+    if (linePath.size() > 1) {
         std::cout << *(path.back().second.begin()) << " ";
         for (auto l : linePath) std::cout << l << " ";
         std::cout << std::endl;
