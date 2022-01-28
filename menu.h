@@ -69,6 +69,17 @@ public:
     Menu* getNext() override;
 };
 
+class ByPosMenu : public Menu {
+private:
+    bool goBack;
+    Position getPos() const;
+public:
+    ByPosMenu(TransportNetwork* network, bool goBack = true);
+    virtual ~ByPosMenu() {}
+    void display() const override;
+    Menu* getNext() override;
+};
+
 class RouteMenu : public Menu {
     std::string stop1, stop2;
 public:

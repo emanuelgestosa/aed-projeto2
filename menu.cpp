@@ -7,9 +7,8 @@ int Menu::getInt() const {
     int userInput;
     std::cin >> userInput;
 
-    if(std::cin.fail())
-    {
-        if(std::cin.eof())
+    if (std::cin.fail()) {
+        if (std::cin.eof())
             return 0;
 
         std::cin.clear();
@@ -60,7 +59,7 @@ Menu* TravelMenu::getNext() {
     switch (choice) {
         case 0: return nullptr;
         case 1: return new ByCodeMenu(network, false);
-        case 2: return this;
+        case 2: return new ByPosMenu(network, false);
         default: return this;
     }
 }
@@ -81,7 +80,7 @@ const std::string ByCodeMenu::getCode() const {
 
 void ByCodeMenu::display() const {
     if (goBack) return;
-    std::cout << "(Enter the zone code)" << std::endl;
+    std::cout << "(Enter the stop code)" << std::endl;
 }
 
 Menu* ByCodeMenu::getNext() {
@@ -100,6 +99,49 @@ Menu* ByCodeMenu::getNext() {
         std::cout << "Invalid stop." << std::endl;
         return nullptr;
     }
+    goBack = true;
+    return new RouteMenu(network, src, dest);
+}
+
+/*************************************************************************/
+
+ByPosMenu::ByPosMenu(TransportNetwork* network, bool goBack) : Menu(network) {
+    this->goBack = goBack;
+}
+
+Position ByPosMenu::getPos() const {
+    double lat, lon;
+    std::cin >> lat >> lon;
+    if(std::cin.fail()) {
+        if(std::cin.eof())
+            return {0, 0};
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        return {-1, -1};
+    }
+    return {lat, lon};
+}
+
+void ByPosMenu::display() const {
+    if (goBack) return;
+    std::cout << "(Enter the position)" << std::endl;
+}
+
+Menu* ByPosMenu::getNext() {
+    if (goBack) return nullptr;
+    std::cout << "From (latitude longitude): ";
+    Position src = getPos();
+    if (src == {-1, -1}) {
+        std::cout << "Invalid position." << std::endl;
+        return nullptr;
+    } if (src == {0, 0}) return nullptr;
+
+    std::cout << "From (latitude longitude): ";
+    Position dest = getPos();
+    if (dest == {-1, -1}) {
+        std::cout << "Invalid position." << std::endl;
+        return nullptr;
+    } if (dest == {0, 0}) return nullptr;
     goBack = true;
     return new RouteMenu(network, src, dest);
 }
