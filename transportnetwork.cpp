@@ -10,7 +10,7 @@ TransportNetwork::TransportNetwork() {
         readSuccess = false;
         return;
     }
-    addWalkConns(0.35);
+    addWalkConns(0.3);
 }
 
 bool TransportNetwork::getReadSuccess() const {
@@ -70,6 +70,7 @@ std::list<std::pair<std::string, std::set<std::string>>> TransportNetwork::dijks
         for (const auto& e : stops.at(u).adj) {
             int v = e.dest;
             if (!stops.at(v).visited && stops.at(u).dist + e.weight < stops.at(v).dist) {
+                if (stops.at(u).lines.find("WALK") != stops.at(u).lines.end() && e.lineCodes.find("WALK") != e.lineCodes.end()) continue;
                 stops.at(v).dist = stops.at(u).dist + e.weight;
                 stops.at(v).pred = u;
                 stops.at(v).lines = e.lineCodes;
@@ -126,6 +127,7 @@ std::list<std::pair<std::string, std::set<std::string>>> TransportNetwork::bfsPa
         for (auto& e : stops.at(u).adj) {
             int w = e.dest;
             if (!stops.at(w).visited) {
+                if (stops.at(u).lines.find("WALK") != stops.at(u).lines.end() && e.lineCodes.find("WALK") != e.lineCodes.end()) continue;
                 q.push(w);
                 stops.at(w).visited = true;
                 stops.at(w).dist = stops.at(u).dist + 1;
