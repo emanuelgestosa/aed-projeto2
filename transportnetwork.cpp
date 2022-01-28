@@ -94,6 +94,7 @@ double TransportNetwork::dijkstraDistance(const std::string& code1, const std::s
             if (!stops.at(v).visited && stops.at(u).dist + e.weight < stops.at(v).dist) {
                 if (stops.at(u).lines.find("WALK") != stops.at(u).lines.end() && e.lineCodes.find("WALK") != e.lineCodes.end()) continue;
                 stops.at(v).dist = stops.at(u).dist + e.weight;
+                stops.at(v).lines = e.lineCodes;
                 if (!heap.hasKey(v)) heap.insert(v, stops.at(v).dist);
                 else heap.decreaseKey(v, stops.at(v).dist);
             }
@@ -164,6 +165,7 @@ double TransportNetwork::bfsDistance(const std::string& code1, const std::string
                 q.push(w);
                 stops.at(w).visited = true;
                 stops.at(w).dist = stops.at(u).dist + e.weight;
+                stops.at(w).lines = e.lineCodes;
             }
         }
     }
