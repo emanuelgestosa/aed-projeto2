@@ -5,7 +5,7 @@
 #include <list>
 #include <string>
 #include <queue>
-#include <unordered_set>
+#include <set>
 #include <unordered_map>
 #include <fstream>
 #include <iostream>
@@ -22,7 +22,7 @@ class TransportNetwork {
     struct Connection {
         int dest;
         double weight;
-        std::unordered_set<std::string> lineCodes;
+        std::set<std::string> lineCodes;
     };
 
     struct Stop {
@@ -32,12 +32,14 @@ class TransportNetwork {
         bool visited;
         std::string name, code, zone;
         Position position;
+        std::set<std::string> lines;
     };
 
     int n;
     bool readSuccess;
     std::vector<Stop> stops;
     std::unordered_map<std::string, int> stopToInt;
+    std::set<std::string> lines;
 
     bool readStops();
     bool readLines();
@@ -50,10 +52,11 @@ public:
     TransportNetwork();
     bool getReadSuccess() const;
     bool exists(const std::string& code) const;
+    std::set<std::string> getLines() const;
     double dijkstraDistance(const std::string& code1, const std::string& code2); 
-    std::list<std::string> dijkstraPath(const std::string& code1, const std::string& code2); 
+    std::list<std::pair<std::string, std::set<std::string>>> dijkstraPath(const std::string& code1, const std::string& code2); 
     double bfsDistance(const std::string& code1, const std::string& code2);
-    std::list<std::string> bfsPath(const std::string& code1, const std::string& code2);
+    std::list<std::pair<std::string, std::set<std::string>>> bfsPath(const std::string& code1, const std::string& code2);
 };
 
 #endif

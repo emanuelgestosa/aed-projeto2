@@ -20,6 +20,10 @@ bool TransportNetwork::exists(const std::string& code) const {
     return stopToInt.find(code) != stopToInt.end();
 }
 
+std::set<std::string> TransportNetwork::getLines() const {
+    return lines;
+}
+
 double TransportNetwork::dijkstraDistance(const std::string& code1, const std::string& code2) {
     int a = stopToInt[code1], b = stopToInt[code2];
     const double notFound = -1.0;
@@ -46,9 +50,9 @@ double TransportNetwork::dijkstraDistance(const std::string& code1, const std::s
     else return stops.at(b).dist;
 }
 
-std::list<std::string> TransportNetwork::dijkstraPath(const std::string& code1, const std::string& code2) {
+std::list<std::pair<std::string, std::set<std::string>>> TransportNetwork::dijkstraPath(const std::string& code1, const std::string& code2) {
     int a = stopToInt[code1], b = stopToInt[code2];
-    std::list<std::string> path;
+    std::list<std::pair<std::string, std::set<std::string>>> path;
     if (a == b) return path;
     const double notFound = -1.0;
     MinHeap<int, double> heap((int)stops.size(), notFound);
@@ -67,6 +71,7 @@ std::list<std::string> TransportNetwork::dijkstraPath(const std::string& code1, 
             if (!stops.at(v).visited && stops.at(u).dist + e.weight < stops.at(v).dist) {
                 stops.at(v).dist = stops.at(u).dist + e.weight;
                 stops.at(v).pred = u;
+                stops.at(v).lines = e.lineCodes;
                 if (!heap.hasKey(v)) heap.insert(v, stops.at(v).dist);
                 else heap.decreaseKey(v, stops.at(v).dist);
             }
@@ -74,10 +79,10 @@ std::list<std::string> TransportNetwork::dijkstraPath(const std::string& code1, 
     }
     if (stops.at(b).dist == 100000.0) return path;
     int pred = b;
-    path.push_front(stops.at(b).code);
+    path.push_front({stops.at(b).code, stops.at(b).lines});
     while (pred != a) {
         pred = stops.at(pred).pred;
-        path.push_front(stops.at(pred).code);
+        path.push_front({stops.at(pred).code, stops.at(pred).lines});
     }
     return path;
 }
@@ -104,9 +109,9 @@ double TransportNetwork::bfsDistance(const std::string& code1, const std::string
     return stops.at(b).dist;
 } 
 
-std::list<std::string> TransportNetwork::bfsPath(const std::string& code1, const std::string& code2) {
+std::list<std::pair<std::string, std::set<std::string>>> TransportNetwork::bfsPath(const std::string& code1, const std::string& code2) {
     int a = stopToInt[code1], b = stopToInt[code2];
-    std::list<std::string> path;
+    std::list<std::pair<std::string, std::set<std::string>>> path;
     if (a == b) return path;
     for (int v = 1; v <= n; v++) stops.at(v).visited = false;
     std::queue<int> q;
@@ -124,15 +129,16 @@ std::list<std::string> TransportNetwork::bfsPath(const std::string& code1, const
                 stops.at(w).visited = true;
                 stops.at(w).dist = stops.at(u).dist + 1;
                 stops.at(w).pred = u;
+                stops.at(w).lines = e.lineCodes;
             }
         }
     }
     if (stops.at(b).dist == -1) return path;
     int pred = b;
-    path.push_front(stops.at(b).code);
+    path.push_front({stops.at(b).code, stops.at(b).lines});
     while (pred != a) {
         pred = stops.at(pred).pred;
-        path.push_front(stops.at(pred).code);
+        path.push_front({stops.at(pred).code, stops.at(pred).lines});
     }
     return path;
 }
@@ -179,6 +185,7 @@ bool TransportNetwork::readLines() {
 bool TransportNetwork::readLine(const std::string &lineCode, const std::string &lineName) {
     if (!readLine(lineCode, lineName, LINE_FILE + lineCode + "_0.csv")) return false;
     if (!readLine(lineCode, lineName, LINE_FILE + lineCode + "_1.csv")) return false;
+    lines.insert(lineCode);
     return true;
 }
 

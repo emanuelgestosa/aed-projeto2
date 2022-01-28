@@ -146,6 +146,39 @@ void LeastDistMenu::display() const {
               << "you will travel " << dist << " km" << std::endl
               << "and pass through " << path.size() << " stops" << std::endl
               <<"(Enter '0' to go back)" << std::endl;
+
+    std::list<std::string> linePath;
+    std::set<std::string> lines = network->getLines();
+    std::set<std::string> oldLines;
+    std::string lastStop;
+    std::vector<std::string> intersect;
+    for (auto i : path) {
+        if (i.second.empty()) i.second = network->getLines();
+        intersect.clear();
+        std::set_intersection(lines.begin(), lines.end(), 
+                              i.second.begin(), i.second.end(), 
+                              std::back_inserter(intersect));
+        lines.clear();
+        for (auto a : intersect) lines.insert(a);
+        if (lines.empty()) {
+            lines = i.second;
+            if (!linePath.empty()) {
+                std::cout << *(oldLines.begin()) << " ";
+                for (auto l : linePath) std::cout << l << " ";
+                std::cout << std::endl;
+            }
+            linePath.clear();
+            linePath.push_back(lastStop);
+        } 
+        linePath.push_back(i.first);
+        oldLines = lines;
+        lastStop = i.first;
+    }
+    if (!linePath.empty()) {
+        std::cout << *(path.back().second.begin()) << " ";
+        for (auto l : linePath) std::cout << l << " ";
+        std::cout << std::endl;
+    }
 }
 
 Menu* LeastDistMenu::getNext() {
@@ -168,6 +201,39 @@ void LeastStopsMenu::display() const {
               << "you will travel " << dist << " km" << std::endl
               << "and pass through " << path.size() << " stops" << std::endl
               <<"(Enter '0' to go back)" << std::endl;
+
+    std::list<std::string> linePath;
+    std::set<std::string> lines = network->getLines();
+    std::set<std::string> oldLines;
+    std::string lastStop;
+    std::vector<std::string> intersect;
+    for (auto i : path) {
+        if (i.second.empty()) i.second = network->getLines();
+        intersect.clear();
+        std::set_intersection(lines.begin(), lines.end(), 
+                              i.second.begin(), i.second.end(), 
+                              std::back_inserter(intersect));
+        lines.clear();
+        for (auto a : intersect) lines.insert(a);
+        if (lines.empty()) {
+            lines = i.second;
+            if (!linePath.empty()) {
+                std::cout << *(oldLines.begin()) << " ";
+                for (auto l : linePath) std::cout << l << " ";
+                std::cout << std::endl;
+            }
+            linePath.clear();
+            linePath.push_back(lastStop);
+        } 
+        linePath.push_back(i.first);
+        oldLines = lines;
+        lastStop = i.first;
+    }
+    if (!linePath.empty()) {
+        std::cout << *(path.back().second.begin()) << " ";
+        for (auto l : linePath) std::cout << l << " ";
+        std::cout << std::endl;
+    }
 }
 
 Menu* LeastStopsMenu::getNext() {
