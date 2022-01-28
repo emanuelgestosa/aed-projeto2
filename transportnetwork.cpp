@@ -49,6 +49,7 @@ double TransportNetwork::dijkstraDistance(const std::string& code1, const std::s
 std::list<std::string> TransportNetwork::dijkstraPath(const std::string& code1, const std::string& code2) {
     int a = stopToInt[code1], b = stopToInt[code2];
     std::list<std::string> path;
+    if (a == b) return path;
     const double notFound = -1.0;
     MinHeap<int, double> heap((int)stops.size(), notFound);
     for (int i = 1; i <= n; i++) {
@@ -106,6 +107,7 @@ double TransportNetwork::bfsDistance(const std::string& code1, const std::string
 std::list<std::string> TransportNetwork::bfsPath(const std::string& code1, const std::string& code2) {
     int a = stopToInt[code1], b = stopToInt[code2];
     std::list<std::string> path;
+    if (a == b) return path;
     for (int v = 1; v <= n; v++) stops.at(v).visited = false;
     std::queue<int> q;
     q.push(a);
