@@ -80,6 +80,15 @@ public:
     Menu* getNext() override;
 };
 
+class ChooseStopMenu : public Menu {
+    Position pos1, pos2;
+public:
+    ChooseStopMenu(TransportNetwork* network, Position pos1, Position pos2);
+    virtual ~ChooseStopMenu() {}
+    void display() const override;
+    Menu* getNext() override;
+};
+
 class RouteMenu : public Menu {
     std::string stop1, stop2;
 public:
