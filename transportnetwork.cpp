@@ -10,6 +10,7 @@ TransportNetwork::TransportNetwork() {
         readSuccess = false;
         return;
     }
+    addWalkConns(0.35);
 }
 
 bool TransportNetwork::getReadSuccess() const {
@@ -210,6 +211,21 @@ bool TransportNetwork::readLine(const std::string &lineCode, const std::string &
         prev = stopCode;
     }
     return true;
+}
+
+void TransportNetwork::addWalkConns(const double wDist) {
+    for (int i = 1; i <= n - 1; i++) {
+        std::set<int> dests;
+        for (const auto& e : stops.at(i).adj)
+            dests.insert(e.dest);
+        for (int j = i+1; j <= n; j++) {
+            if (dests.find(j) != dests.end()) continue;
+            if (stops.at(i).position.calcDist(stops.at(j).position) <= wDist) {
+                addConnection(i, j, "WALK", stops.at(i).position.calcDist(stops.at(j).position));
+                addConnection(j, i, "WALK", stops.at(i).position.calcDist(stops.at(j).position));
+            }
+        }
+    }
 }
 
 void TransportNetwork::addConnection(const int src, const int dest, const std::string& code, double weight) {

@@ -45,6 +45,7 @@ class TransportNetwork {
     bool readLines();
     bool readLine(const std::string &lineCode, const std::string &lineName);
     bool readLine(const std::string &lineCode, const std::string &lineName, const std::string& fileName);
+    void addWalkConns(const double wDist);
     void addConnection(const int src, const int dest, const std::string& code, double weight = 1.0);
 
 public:
