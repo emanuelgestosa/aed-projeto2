@@ -55,7 +55,7 @@ public:
     TransportNetwork();
     bool getReadSuccess() const;
     bool exists(const std::string& code) const;
-    std::string findNearestStop(Position pos) const;
+    std::vector<std::string> findNearestStops(Position pos) const;
     std::set<std::string> getLines() const;
     double dijkstraDistance(const std::string& code1, const std::string& code2); 
     std::list<std::pair<std::string, std::set<std::string>>> dijkstraPath(const std::string& code1, const std::string& code2); 

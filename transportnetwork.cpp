@@ -21,17 +21,53 @@ bool TransportNetwork::exists(const std::string& code) const {
     return stopToInt.find(code) != stopToInt.end();
 }
 
-std::string TransportNetwork::findNearestStop(Position pos) const {
-    double shortestDist = DBL_MAX;
-    std::string closestStop;
+std::vector<std::string> TransportNetwork::findNearestStops(Position pos) const {
+    double shortestDist1 = DBL_MAX;
+    double shortestDist2 = DBL_MAX;
+    double shortestDist3 = DBL_MAX;
+    double shortestDist4 = DBL_MAX;
+    double shortestDist5 = DBL_MAX;
+    std::string closestStop1, closestStop2, closestStop3, closestStop4, closestStop5;
     for (int i = 1; i <= n; i++) {
         double dist = pos.calcDist(stops.at(i).position);
-        if (dist < shortestDist) {
-            shortestDist = dist;
-            closestStop = stops.at(i).code;
+        if (dist < shortestDist1) {
+            shortestDist5 = shortestDist4;
+            closestStop5 = closestStop4;
+            shortestDist4 = shortestDist3;
+            closestStop4 = closestStop3;
+            shortestDist3 = shortestDist2;
+            closestStop3 = closestStop2;
+            shortestDist2 = shortestDist1;
+            closestStop2 = closestStop1;
+            shortestDist1 = dist;
+            closestStop1 = stops.at(i).code;
+        } else if (dist < shortestDist2) {
+            shortestDist5 = shortestDist4;
+            closestStop5 = closestStop4;
+            shortestDist4 = shortestDist3;
+            closestStop4 = closestStop3;
+            shortestDist3 = shortestDist2;
+            closestStop3 = closestStop2;
+            shortestDist2 = dist;
+            closestStop2 = stops.at(i).code;
+        } else if (dist < shortestDist3) {
+            shortestDist5 = shortestDist4;
+            closestStop5 = closestStop4;
+            shortestDist4 = shortestDist3;
+            closestStop4 = closestStop3;
+            shortestDist3 = dist;
+            closestStop3 = stops.at(i).code;
+        } else if (dist < shortestDist4) {
+            shortestDist5 = shortestDist4;
+            closestStop5 = closestStop4;
+            shortestDist4 = dist;
+            closestStop4 = stops.at(i).code;
+        } else if (dist < shortestDist5) {
+            shortestDist5 = dist;
+            closestStop5 = stops.at(i).code;
         }
     }
-    return closestStop;
+    return {closestStop1, closestStop2, closestStop3, closestStop4, closestStop5};
 }
 
 std::set<std::string> TransportNetwork::getLines() const {

@@ -146,7 +146,41 @@ Menu* ByPosMenu::getNext() {
         return nullptr;
     } if (dest.getLat() == 0 && dest.getLon() == 0) return nullptr;
     goBack = true;
-    return new RouteMenu(network, network->findNearestStop(src), network->findNearestStop(dest));
+    return new ChooseStopMenu(network, src, dest, false);
+}
+
+/*************************************************************************/
+
+ChooseStopMenu::ChooseStopMenu(TransportNetwork* network, Position pos1, Position pos2, bool goBack) : Menu(network) {
+    this->goBack = goBack;
+    this->pos1 = pos1;
+    this->pos2 = pos2;
+}
+
+void ChooseStopMenu::display() const {
+    if (goBack) return;
+}
+
+Menu* ChooseStopMenu::getNext() {
+    if (goBack) return nullptr;
+    std::cout << "From:" << std::endl
+              << "(Please choose an option)" << std::endl << std::endl;
+    auto srcStops = network->findNearestStops(pos1);
+    auto destStops = network->findNearestStops(pos2);
+    std::cout << "0. Exit." << std::endl;
+    for (int i = 0; i < srcStops.size(); i++) std::cout << i+1 << ". " << srcStops.at(i) << "." << std::endl;
+    int choice1 = getInt();
+    if (choice1 == 0) return nullptr;
+    if (choice1 == -1) return this;
+
+    std::cout << "To:" << std::endl
+              << "(Please choose an option)" << std::endl << std::endl;
+    std::cout << "0. Exit." << std::endl;
+    for (int i = 0; i < destStops.size(); i++) std::cout << i+1 << ". " << destStops.at(i) << "." << std::endl;
+    int choice2 = getInt();
+    if (choice2 == 0) return nullptr;
+    if (choice2 == -1) return this;
+    return new RouteMenu(network, srcStops.at(choice1 - 1), destStops.at(choice2 - 1));
 }
 
 /*************************************************************************/

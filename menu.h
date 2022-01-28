@@ -81,9 +81,10 @@ public:
 };
 
 class ChooseStopMenu : public Menu {
+    bool goBack;
     Position pos1, pos2;
 public:
-    ChooseStopMenu(TransportNetwork* network, Position pos1, Position pos2);
+    ChooseStopMenu(TransportNetwork* network, Position pos1, Position pos2, bool goBack = true);
     virtual ~ChooseStopMenu() {}
     void display() const override;
     Menu* getNext() override;
