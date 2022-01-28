@@ -29,7 +29,7 @@ void MainMenu::display() const {
     std::cout << "Welcome to the STCP helper!" << std::endl
               << "(Please choose an option)" << std::endl
               << "0. Exit." << std::endl
-              << "1. Travel" << std::endl;
+              << "1. Travel." << std::endl;
 }
 
 Menu* MainMenu::getNext() {
@@ -164,11 +164,11 @@ void ChooseStopMenu::display() const {
 Menu* ChooseStopMenu::getNext() {
     if (goBack) return nullptr;
     std::cout << "From:" << std::endl
-              << "(Please choose an option)" << std::endl << std::endl;
+              << "(Please choose an option)" << std::endl;
     auto srcStops = network->findNearestStops(pos1);
     auto destStops = network->findNearestStops(pos2);
     std::cout << "0. Exit." << std::endl;
-    for (int i = 0; i < srcStops.size(); i++) std::cout << i+1 << ". " << srcStops.at(i) << "." << std::endl;
+    for (int i = 0; i < srcStops.size(); i++) std::cout << i+1 << ". " << srcStops.at(i) << std::endl;
     int choice1 = getInt();
     if (choice1 == 0) return nullptr;
     if (choice1 == -1) return this;
@@ -176,7 +176,7 @@ Menu* ChooseStopMenu::getNext() {
     std::cout << "To:" << std::endl
               << "(Please choose an option)" << std::endl << std::endl;
     std::cout << "0. Exit." << std::endl;
-    for (int i = 0; i < destStops.size(); i++) std::cout << i+1 << ". " << destStops.at(i) << "." << std::endl;
+    for (int i = 0; i < destStops.size(); i++) std::cout << i+1 << ". " << destStops.at(i) << std::endl;
     int choice2 = getInt();
     if (choice2 == 0) return nullptr;
     if (choice2 == -1) return this;
@@ -195,7 +195,7 @@ void RouteMenu::display() const {
               << "(Please choose an option)" << std::endl
               << "0. Back to travel menu." << std::endl
               << "1. Least distance travelled." << std::endl
-              << "2. Least stops visited" << std::endl;
+              << "2. Least stops visited." << std::endl;
 }
 
 Menu* RouteMenu::getNext() {
