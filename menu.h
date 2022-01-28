@@ -117,4 +117,12 @@ public:
     Menu* getNext() override;
 };
 
+class SpecialMenu : public Menu {
+public:
+    SpecialMenu(TransportNetwork* network);
+    virtual ~SpecialMenu() {}
+    void display() const override;
+    Menu* getNext() override;
+};
+
 #endif

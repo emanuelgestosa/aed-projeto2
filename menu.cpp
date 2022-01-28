@@ -29,7 +29,8 @@ void MainMenu::display() const {
     std::cout << "Welcome to the STCP helper!" << std::endl
               << "(Please choose an option)" << std::endl
               << "0. Exit." << std::endl
-              << "1. Travel." << std::endl;
+              << "1. Travel." << std::endl
+              << "2. Special journey." << std::endl;
 }
 
 Menu* MainMenu::getNext() {
@@ -37,6 +38,7 @@ Menu* MainMenu::getNext() {
     switch (choice) {
         case 0: return nullptr;
         case 1: return new TravelMenu(network);
+        case 2: return new SpecialMenu(network);
         default: return this;
     }
 }
@@ -316,4 +318,25 @@ void LeastStopsMenu::display() const {
 Menu* LeastStopsMenu::getNext() {
     getInt();
     return nullptr;
+}
+
+/*************************************************************************/
+
+SpecialMenu::SpecialMenu(TransportNetwork* network) : Menu(network) {}
+
+void SpecialMenu::display() const {
+    std::cout << "Welcome to the special journey menu!" << std::endl
+              << "Here you can choose a stop as start point" << std::endl
+              << "and visit every stop in our network!" << std::endl
+              << "(Please choose an option)" << std::endl
+              << "0. Back to main menu." << std::endl
+              << "1. Pick starting point." << std::endl;
+}
+
+Menu* SpecialMenu::getNext() {
+    int choice = getInt();
+    switch (choice) {
+        case 0: return nullptr;
+        default: return this;
+    }
 }
