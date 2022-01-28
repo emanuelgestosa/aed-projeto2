@@ -91,8 +91,8 @@ double TransportNetwork::dijkstraDistance(const std::string& code1, const std::s
         stops.at(u).visited = true;
         for (const auto& e : stops.at(u).adj) {
             int v = e.dest;
-            if (!stops.at(v).visited && stops.at(u).dist + e.weight < stops.at(v).dist) {
-                if (stops.at(u).lines.find("WALK") != stops.at(u).lines.end() && e.lineCodes.find("WALK") != e.lineCodes.end()) continue;
+            if (!stops.at(v).visited && stops.at(u).dist + e.weight < stops.at(v).dist &&
+                (stops.at(u).lines.find("WALK") == stops.at(u).lines.end() || e.lineCodes.find("WALK") == e.lineCodes.end())) {
                 stops.at(v).dist = stops.at(u).dist + e.weight;
                 stops.at(v).lines = e.lineCodes;
                 if (!heap.hasKey(v)) heap.insert(v, stops.at(v).dist);
@@ -124,8 +124,8 @@ std::list<std::pair<std::string, std::set<std::string>>> TransportNetwork::dijks
         stops.at(u).visited = true;
         for (const auto& e : stops.at(u).adj) {
             int v = e.dest;
-            if (!stops.at(v).visited && stops.at(u).dist + e.weight < stops.at(v).dist) {
-                if (stops.at(u).lines.find("WALK") != stops.at(u).lines.end() && e.lineCodes.find("WALK") != e.lineCodes.end()) continue;
+            if (!stops.at(v).visited && stops.at(u).dist + e.weight < stops.at(v).dist &&
+                (stops.at(u).lines.find("WALK") == stops.at(u).lines.end() || e.lineCodes.find("WALK") == e.lineCodes.end())) {
                 stops.at(v).dist = stops.at(u).dist + e.weight;
                 stops.at(v).pred = u;
                 stops.at(v).lines = e.lineCodes;
@@ -158,10 +158,10 @@ double TransportNetwork::bfsDistance(const std::string& code1, const std::string
     stops.at(a).visited = true;
     while (!q.empty()) {
         int u = q.front(); q.pop();
-        for (auto& e : stops.at(u).adj) {
+        for (const auto& e : stops.at(u).adj) {
             int w = e.dest;
-            if (!stops.at(w).visited) {
-                if (stops.at(u).lines.find("WALK") != stops.at(u).lines.end() && e.lineCodes.find("WALK") != e.lineCodes.end()) continue;
+            if (!stops.at(w).visited && 
+                (stops.at(u).lines.find("WALK") == stops.at(u).lines.end() || e.lineCodes.find("WALK") == e.lineCodes.end())) {
                 q.push(w);
                 stops.at(w).visited = true;
                 stops.at(w).dist = stops.at(u).dist + e.weight;
@@ -189,10 +189,10 @@ std::list<std::pair<std::string, std::set<std::string>>> TransportNetwork::bfsPa
     stops.at(a).pred = a;
     while (!q.empty()) {
         int u = q.front(); q.pop();
-        for (auto& e : stops.at(u).adj) {
+        for (const auto& e : stops.at(u).adj) {
             int w = e.dest;
-            if (!stops.at(w).visited) {
-                if (stops.at(u).lines.find("WALK") != stops.at(u).lines.end() && e.lineCodes.find("WALK") != e.lineCodes.end()) continue;
+            if (!stops.at(w).visited &&
+                (stops.at(u).lines.find("WALK") == stops.at(u).lines.end() || e.lineCodes.find("WALK") == e.lineCodes.end())) {
                 q.push(w);
                 stops.at(w).visited = true;
                 stops.at(w).dist = stops.at(u).dist + 1;
@@ -281,16 +281,15 @@ bool TransportNetwork::readLine(const std::string &lineCode, const std::string &
 }
 
 void TransportNetwork::addWalkConns(const double wDist) {
-    for (int i = 1; i <= n - 1; i++) {
+    for (int i = 1; i <= n; i++) {
         std::set<int> dests;
         for (const auto& e : stops.at(i).adj)
             dests.insert(e.dest);
-        for (int j = i+1; j <= n; j++) {
+        for (int j = 1; j <= n; j++) {
+            if (i == j) continue;
             if (dests.find(j) != dests.end()) continue;
-            if (stops.at(i).position.calcDist(stops.at(j).position) <= wDist) {
+            if (stops.at(i).position.calcDist(stops.at(j).position) <= wDist)
                 addConnection(i, j, "WALK", stops.at(i).position.calcDist(stops.at(j).position));
-                addConnection(j, i, "WALK", stops.at(i).position.calcDist(stops.at(j).position));
-            }
         }
     }
 }
