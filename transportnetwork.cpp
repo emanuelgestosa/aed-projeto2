@@ -21,6 +21,19 @@ bool TransportNetwork::exists(const std::string& code) const {
     return stopToInt.find(code) != stopToInt.end();
 }
 
+std::string TransportNetwork::findNearestStop(Position pos) const {
+    double shortestDist = DBL_MAX;
+    std::string closestStop;
+    for (int i = 1; i <= n; i++) {
+        double dist = pos.calcDist(stops.at(i).position);
+        if (dist < shortestDist) {
+            shortestDist = dist;
+            closestStop = stops.at(i).code;
+        }
+    }
+    return closestStop;
+}
+
 std::set<std::string> TransportNetwork::getLines() const {
     return lines;
 }

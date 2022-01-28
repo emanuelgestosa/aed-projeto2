@@ -110,16 +110,19 @@ ByPosMenu::ByPosMenu(TransportNetwork* network, bool goBack) : Menu(network) {
 }
 
 Position ByPosMenu::getPos() const {
+    Position eofPos; eofPos.setLat(0); eofPos.setLon(0);
+    Position invPos; invPos.setLat(-1); invPos.setLon(-1);
     double lat, lon;
     std::cin >> lat >> lon;
     if(std::cin.fail()) {
         if(std::cin.eof())
-            return {0, 0};
+            return eofPos;
         std::cin.clear();
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        return {-1, -1};
+        return invPos;
     }
-    return {lat, lon};
+    Position pos; pos.setLat(lat); pos.setLon(lon);
+    return pos;
 }
 
 void ByPosMenu::display() const {
@@ -131,24 +134,24 @@ Menu* ByPosMenu::getNext() {
     if (goBack) return nullptr;
     std::cout << "From (latitude longitude): ";
     Position src = getPos();
-    if (src == {-1, -1}) {
+    if (src.getLat() == -1 && src.getLon() == -1) {
         std::cout << "Invalid position." << std::endl;
         return nullptr;
-    } if (src == {0, 0}) return nullptr;
+    } if (src.getLat() == 0 && src.getLon() == 0) return nullptr;
 
-    std::cout << "From (latitude longitude): ";
+    std::cout << "To (latitude longitude): ";
     Position dest = getPos();
-    if (dest == {-1, -1}) {
+    if (dest.getLat() == -1 && dest.getLon() == -1) {
         std::cout << "Invalid position." << std::endl;
         return nullptr;
-    } if (dest == {0, 0}) return nullptr;
+    } if (dest.getLat() == 0 && dest.getLon() == 0) return nullptr;
     goBack = true;
-    return new RouteMenu(network, src, dest);
+    return new RouteMenu(network, network->findNearestStop(src), network->findNearestStop(dest));
 }
 
 /*************************************************************************/
 
-RouteMenu::RouteMenu(TransportNetwork* network, const std::string& stop1, std::string& stop2) : Menu(network) {
+RouteMenu::RouteMenu(TransportNetwork* network, const std::string& stop1, const std::string& stop2) : Menu(network) {
     this->stop1 = stop1;
     this->stop2 = stop2;
 }
@@ -173,7 +176,7 @@ Menu* RouteMenu::getNext() {
 
 /*************************************************************************/
 
-LeastDistMenu::LeastDistMenu(TransportNetwork* network, const std::string& stop1, std::string& stop2) : Menu(network) {
+LeastDistMenu::LeastDistMenu(TransportNetwork* network, const std::string& stop1, const std::string& stop2) : Menu(network) {
     this->stop1 = stop1;
     this->stop2 = stop2;
 }
@@ -228,7 +231,7 @@ Menu* LeastDistMenu::getNext() {
 
 /*************************************************************************/
 
-LeastStopsMenu::LeastStopsMenu(TransportNetwork* network, const std::string& stop1, std::string& stop2) : Menu(network) {
+LeastStopsMenu::LeastStopsMenu(TransportNetwork* network, const std::string& stop1, const std::string& stop2) : Menu(network) {
     this->stop1 = stop1;
     this->stop2 = stop2;
 }
