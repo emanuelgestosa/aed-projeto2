@@ -10,11 +10,6 @@ TransportNetwork::TransportNetwork() {
         readSuccess = false;
         return;
     }
-    for (auto i: stops.at(stopToInt["GRC1"]).adj) {
-        std::cout << stops.at(i.dest).code << " ";
-        for (auto c: i.lineCodes) std::cout << c << " ";
-        std::cout << std::endl;
-    }
 }
 
 bool TransportNetwork::getReadSuccess() const {
