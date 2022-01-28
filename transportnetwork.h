@@ -5,6 +5,7 @@
 #include <list>
 #include <string>
 #include <queue>
+#include <set>
 #include <unordered_map>
 #include <fstream>
 #include <iostream>
@@ -21,7 +22,7 @@ class TransportNetwork {
     struct Connection {
         int dest;
         double weight;
-        std::list<std::string> lineCodes;
+        std::set<std::string> lineCodes;
     };
 
     struct Stop {

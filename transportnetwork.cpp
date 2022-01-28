@@ -10,6 +10,11 @@ TransportNetwork::TransportNetwork() {
         readSuccess = false;
         return;
     }
+    for (auto i: stops.at(stopToInt["GRC1"]).adj) {
+        std::cout << stops.at(i.dest).code << " ";
+        for (auto c: i.lineCodes) std::cout << c << " ";
+        std::cout << std::endl;
+    }
 }
 
 bool TransportNetwork::getReadSuccess() const {
@@ -208,7 +213,7 @@ void TransportNetwork::addConnection(const int src, const int dest, const std::s
     bool hasConn = false;
     for (auto& a : stops.at(src).adj)
         if (a.dest == dest) {
-            a.lineCodes.push_back(code);
+            a.lineCodes.insert(code);
             hasConn = true;
             break;
         }
