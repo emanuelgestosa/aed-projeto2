@@ -21,6 +21,8 @@
 
 /**
  * @brief Contains and manages all the information about the STCP network.
+ * 
+ * For the big-O notation |S| is the number of stops and |C| the number of connections.
  */
 class TransportNetwork {
 
@@ -133,6 +135,7 @@ public:
 
     /**
      * Computes the minimum distance to travel between two stops using the dijkstra algorithm.
+     * O(|C|log|S|)
      * 
      * @param code1 The starting stop.
      * @param code2 The destination stop.
@@ -143,6 +146,7 @@ public:
 
     /**
      * Computes the shortest path to take from one stop to another using the dijkstra algorithm.
+     * O(|C|log|S|)
      * 
      * @param code1 The starting stop.
      * @param code2 The destination stop.
@@ -155,6 +159,7 @@ public:
      * Compute distance to travel between two stops while
      * passing through the minimum amount of stops possible
      * using breadth-first search.
+     * O(|S| + |C|)
      * 
      * @param code1 The starting stop.
      * @param code2 The destination stop.
@@ -167,6 +172,7 @@ public:
      * Computes the path between two stops which
      * passes through the least amount of stops
      * using breadth-first search.
+     * O(|S| + |C|)
      * 
      * @param code1 The starting stop.
      * @param code2 The destination stop.
@@ -178,6 +184,8 @@ public:
     /**
      * Computes the minimum-spanning-tree cost of the
      * entire network assuming every stop is connected to each other.
+     * O(|C|log|S|) and since every stop connects to every other this can be simplified to:
+     * O((|S|^2)log|S|)
      * 
      * @param start The starting stop. (Used just for testing purposes, since the cost should be the same for every starting point)
      * 
