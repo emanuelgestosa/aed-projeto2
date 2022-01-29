@@ -30,7 +30,7 @@ void MainMenu::display() const {
               << "(Please choose an option)" << std::endl
               << "0. Exit." << std::endl
               << "1. Travel." << std::endl
-              << "2. Special journey." << std::endl;
+              << "2. Curiosity." << std::endl;
 }
 
 Menu* MainMenu::getNext() {
@@ -325,18 +325,14 @@ Menu* LeastStopsMenu::getNext() {
 SpecialMenu::SpecialMenu(TransportNetwork* network) : Menu(network) {}
 
 void SpecialMenu::display() const {
-    std::cout << "Welcome to the special journey menu!" << std::endl
-              << "Here you can choose a stop as start point" << std::endl
-              << "and visit every stop in our network!" << std::endl
-              << "(Please choose an option)" << std::endl
-              << "0. Back to main menu." << std::endl
-              << "1. Pick starting point." << std::endl;
+    double cost = network->mstCost("ALFG1");
+    std::cout << "Welcome to the curiosity menu!" << std::endl
+              << "Did you know that the minimum amount of road to" << std::endl
+              << "connect every single stop in our network is " << cost << " km?" << std::endl
+              << "(Enter '0' to go back)" << std::endl;
 }
 
 Menu* SpecialMenu::getNext() {
-    int choice = getInt();
-    switch (choice) {
-        case 0: return nullptr;
-        default: return this;
-    }
+    getInt();
+    return nullptr;
 }
