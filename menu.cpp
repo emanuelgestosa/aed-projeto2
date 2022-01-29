@@ -176,7 +176,7 @@ Menu* ChooseStopMenu::getNext() {
     if (choice1 == -1) return this;
 
     std::cout << "To:" << std::endl
-              << "(Please choose an option)" << std::endl << std::endl;
+              << "(Please choose an option)" << std::endl;
     std::cout << "0. Exit." << std::endl;
     for (int i = 0; i < destStops.size(); i++) std::cout << i+1 << ". " << destStops.at(i) << std::endl;
     int choice2 = getInt();
