@@ -3,6 +3,9 @@
 
 #include <cmath>
 
+/**
+ * @brief Contains information about a position
+ */
 class Position {
 private:
     double lat, lon;
