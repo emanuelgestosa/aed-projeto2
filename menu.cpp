@@ -243,8 +243,7 @@ void LeastDistMenu::display() const {
             lines = i.second;
             if (linePath.size() > 1) {
                 std::cout << *(oldLines.begin()) << " ";
-                for (auto l : linePath) std::cout << l << " ";
-                std::cout << std::endl;
+                std::cout << linePath.front() << " -> " << linePath.back() << std::endl;
             }
             linePath.clear();
             if (!lastStop.empty()) linePath.push_back(lastStop);
@@ -255,8 +254,7 @@ void LeastDistMenu::display() const {
     }
     if (linePath.size() > 1) {
         std::cout << *(path.back().second.begin()) << " ";
-        for (auto l : linePath) std::cout << l << " ";
-        std::cout << std::endl;
+        std::cout << linePath.front() << " -> "<< linePath.back() << std::endl;
     }
 }
 
@@ -298,8 +296,7 @@ void LeastStopsMenu::display() const {
             lines = i.second;
             if (linePath.size() > 1) {
                 std::cout << *(oldLines.begin()) << " ";
-                for (auto l : linePath) std::cout << l << " ";
-                std::cout << std::endl;
+                std::cout << linePath.front() << " -> " << linePath.back() << std::endl;
             }
             linePath.clear();
             if (!lastStop.empty()) linePath.push_back(lastStop);
@@ -310,8 +307,7 @@ void LeastStopsMenu::display() const {
     }
     if (linePath.size() > 1) {
         std::cout << *(path.back().second.begin()) << " ";
-        for (auto l : linePath) std::cout << l << " ";
-        std::cout << std::endl;
+        std::cout << linePath.front() << " -> " << linePath.back() << std::endl;
     }
 }
 
