@@ -61,7 +61,7 @@ public:
     std::list<std::pair<std::string, std::set<std::string>>> dijkstraPath(const std::string& code1, const std::string& code2); 
     double bfsDistance(const std::string& code1, const std::string& code2);
     std::list<std::pair<std::string, std::set<std::string>>> bfsPath(const std::string& code1, const std::string& code2);
-    std::list<std::pair<std::string, std::set<std::string>>> mstPath(const std::string& start);
+    double mstCost(const std::string& start);
 };
 
 #endif

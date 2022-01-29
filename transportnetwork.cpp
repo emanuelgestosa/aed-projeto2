@@ -211,6 +211,28 @@ std::list<std::pair<std::string, std::set<std::string>>> TransportNetwork::bfsPa
     return path;
 }
 
+double TransportNetwork::mstCost(const std::string& start) {
+    int a = stopToInt[start];
+    for (int v = 1; v <= n; v++) stops.at(v).dist = 100000.0;
+    stops.at(a).dist = 0;
+    const double notFound = -1.0;
+    MinHeap<int, double> heap((int)stops.size(), notFound);
+    for (int v = 1; v <= n; v++) heap.insert(v, stops.at(v).dist);
+    while (heap.getSize() > 0) {
+        int u = heap.removeMin();
+        for (int v = 1; v <= n; v++) {
+            double dist = stops.at(v).position.calcDist(stops.at(u).position);
+            if (heap.hasKey(v) && dist < stops.at(v).dist) {
+                stops.at(v).dist = dist;
+                heap.decreaseKey(v, dist);
+            }
+        }
+    }
+    double totalDist = 0;
+    for (int v = 1; v <= n; v++) totalDist += stops.at(v).dist;
+    return totalDist;
+}
+
 bool TransportNetwork::readStops() {
     std::ifstream stopsFile(STOPS_FILE);
     if (!stopsFile.is_open()) return false;

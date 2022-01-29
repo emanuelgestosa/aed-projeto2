@@ -327,7 +327,8 @@ SpecialMenu::SpecialMenu(TransportNetwork* network) : Menu(network) {}
 void SpecialMenu::display() const {
     std::cout << "Welcome to the special journey menu!" << std::endl
               << "Here you can choose a stop as start point" << std::endl
-              << "and visit every stop in our network!" << std::endl
+              << "and see how much distance you would cover" << std::endl
+              << "in order to visit every single stop in our network!" << std::endl
               << "(Please choose an option)" << std::endl
               << "0. Back to main menu." << std::endl
               << "1. Pick starting point." << std::endl;
@@ -337,6 +338,7 @@ Menu* SpecialMenu::getNext() {
     int choice = getInt();
     switch (choice) {
         case 0: return nullptr;
+        case 1: std::cout << network->mstCost("ALFG1") << std::endl; return this;
         default: return this;
     }
 }
