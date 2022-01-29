@@ -8,6 +8,9 @@
 
 #define INVALID_STRING_INPUT "INVALID"
 
+/**
+ * @brief Handles all user input and output.
+ */
 class Menu {
 protected:
 
@@ -24,7 +27,17 @@ protected:
 
 public:
 
+    /** Menu constructor recieves a pointer to
+     * the transport network to get some data from.
+     * This is pointer is passed from sub menu to sub menu.
+     * 
+     * @param network The network pointer that is to be passed around.
+     */
     Menu(TransportNetwork* network);
+
+    /**
+     * Menu destructor.
+     */
     virtual ~Menu() {}
 
     /**
@@ -61,6 +74,13 @@ public:
 class ByCodeMenu : public Menu {
 private:
     bool goBack;
+    /**
+     * Gets a string from the user representing
+     * a code of a stop. Returns "" for end of
+     * file or INVALID_STRING_INPUT for invalid inputs.
+     * 
+     * @return A stop code input by the user.
+     */
     const std::string getCode() const;
 public:
     ByCodeMenu(TransportNetwork* network, bool goBack = true);
@@ -72,6 +92,12 @@ public:
 class ByPosMenu : public Menu {
 private:
     bool goBack;
+    /**
+     * Gets a latitude and longitude from the user.
+     * Returns {0, 0} for eof and {-1, -1} for invalid inputs.
+     * 
+     * @return A Position input by the user.
+     */
     Position getPos() const;
 public:
     ByPosMenu(TransportNetwork* network, bool goBack = true);
