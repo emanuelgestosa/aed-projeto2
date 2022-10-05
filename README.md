@@ -8,5 +8,5 @@ Grade: 18.4
 
 ## Installing and running
 
-> make
+> make <br>
 > ./stcp
