@@ -112,8 +112,8 @@ ByPosMenu::ByPosMenu(TransportNetwork* network, bool goBack) : Menu(network) {
 }
 
 Position ByPosMenu::getPos() const {
-    Position eofPos; eofPos.setLat(0); eofPos.setLon(0);
-    Position invPos; invPos.setLat(-1); invPos.setLon(-1);
+    Position eofPos; eofPos.setLat(0.222); eofPos.setLon(0.222);
+    Position invPos; invPos.setLat(0.333); invPos.setLon(0.333);
     double lat, lon;
     std::cin >> lat >> lon;
     if(std::cin.fail()) {
@@ -136,17 +136,17 @@ Menu* ByPosMenu::getNext() {
     if (goBack) return nullptr;
     std::cout << "From (latitude longitude): ";
     Position src = getPos();
-    if (src.getLat() == -1 && src.getLon() == -1) {
+    if (src.getLat() == 0.333 && src.getLon() == 0.333) {
         std::cout << "Invalid position." << std::endl;
         return nullptr;
-    } if (src.getLat() == 0 && src.getLon() == 0) return nullptr;
+    } if (src.getLat() == 0.222 && src.getLon() == 0.222) return nullptr;
 
     std::cout << "To (latitude longitude): ";
     Position dest = getPos();
-    if (dest.getLat() == -1 && dest.getLon() == -1) {
+    if (dest.getLat() == 0.333 && dest.getLon() == 0.333) {
         std::cout << "Invalid position." << std::endl;
         return nullptr;
-    } if (dest.getLat() == 0 && dest.getLon() == 0) return nullptr;
+    } if (dest.getLat() == 0.222 && dest.getLon() == 0.222) return nullptr;
     goBack = true;
     return new ChooseStopMenu(network, src, dest, false);
 }
